@@ -1658,6 +1658,7 @@ in the environment or by setting simulate_cmdpath in DebugValues."""
 #                        ipkg_require_latest = False
 #                else:
 #                        ipkg_require_latest = True
+                ipkg_require_latest = False
 
                 op = API_OP_UPDATE
                 return self.__plan_op(op,
