@@ -30,7 +30,7 @@
 extern "C" {
 #endif
 
-#define	ZP_DOOR_PATH "/system/volatile/zoneproxy_door"
+#define	ZP_DOOR_PATH "/var/run/zoneproxy_door"
 
 
 #define	ZP_CMD_NEW_LISTENER	1

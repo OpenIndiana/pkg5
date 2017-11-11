@@ -87,7 +87,7 @@
 		<!-- The following methods use the 'all' privilege when
 		     run, but drop privileges once they are no longer
 		     needed using ppriv -s. We need 'all' privileges to
-		     write to /system/volatile. -->
+		     write to /var/run. -->
 		<exec_method
 			type='method'
 			name='start'
@@ -135,7 +135,7 @@
                         <!-- Where we store runtime versions of our
 			 configuration -->
                         <propval name='runtime_dir' type='astring'
-                                value='/system/volatile/pkg/depot' />
+                                value='/var/run/pkg/depot' />
                         <!-- Where we store our Mako templates for generating
 			 runtime configuration -->
                         <propval name='template_dir' type='astring'

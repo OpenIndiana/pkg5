@@ -84,7 +84,7 @@ EXIT_BADOPT  = 2
 #
 # variable      default install path          description
 # ---------     ---------------------         ------------
-# runtime_dir   system/volatile/pkg/sysrepo   runtime .conf, htdocs, pid files
+# runtime_dir   var/run/pkg/sysrepo   runtime .conf, htdocs, pid files
 # template_dir  etc/pkg/sysrepo               mako templates
 # log_dir       var/log/pkg/sysrepo           log files
 # cache_dir     var/cache/pkg/sysrepo         apache proxy cache
