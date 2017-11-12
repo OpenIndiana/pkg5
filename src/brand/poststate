@@ -62,4 +62,18 @@ if [ $cmd -eq 4 ]; then
 	fi
 fi
 
+if [ $cmd -eq 0 ]; then
+        ZONE_BRAND=`zoneadm list -pc | /usr/bin/nawk -v zone=$ZONENAME -F':' '$2 == zone { print $6 }'`
+        if [ "$ZONE_BRAND" = "ipkg" ]; then
+                /usr/lib/zones/zoneproxy-adm $ZONENAME
+        fi
+fi
+
+if [ $cmd -eq 4 ]; then
+        ZONE_BRAND=`zoneadm list -pc | /usr/bin/nawk -v zone=$ZONENAME -F':' '$2 == zone { print $6 }'`
+        if [ "$ZONE_BRAND" = "ipkg" ]; then
+                /usr/lib/zones/zoneproxy-adm -R $ZONENAME
+        fi
+fi
+
 exit $ZONE_SUBPROC_OK
