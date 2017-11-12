@@ -47,4 +47,5 @@ file path=usr/lib/zones/zoneproxy-client mode=0555 \
 file path=usr/lib/zones/zoneproxyd mode=0555 variant.opensolaris.zone=global
 license cr_Oracle license=cr_Oracle
 # cross zone dependency on private door interfaces
-#depend type=parent fmri=feature/package/dependency/self #    variant.opensolaris.zone=nonglobal
+depend type=parent fmri=feature/package/dependency/self \
+    variant.opensolaris.zone=nonglobal

@@ -62,4 +62,5 @@ file path=usr/lib/brand/ipkg/system-unconfigure mode=0755
 file path=usr/lib/brand/ipkg/uninstall mode=0755
 legacy pkg=SUNWipkg-brand version=0.0.0
 license cr_Oracle license=cr_Oracle
+depend type=require fmri=package/pkg/zones-proxy
 depend type=require fmri=system/extended-system-utilities pkg.linted=true
