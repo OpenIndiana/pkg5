@@ -66,6 +66,7 @@
 #include <fcntl.h>
 #include <libcontract.h>
 #include <libscf.h>
+#include <libzonecfg.h>
 #include <limits.h>
 #include <netdb.h>
 #include <port.h>
@@ -1235,16 +1236,21 @@ __is_native_zone(zoneid_t zid)
 	 */
 	const char *name_list[] = { "ipkg", "sn1", "labeled" };
 	uint_t nbrands = sizeof (name_list) / sizeof (const char *);
+	char zonename[ZONENAME_MAX];
 	
 	/* global zones have a NULL brand, but can be detected by zid. */
 	if (zid == 0) {
 	        return (B_TRUE);
 	}
-	zone_getattr(zid, ZONE_ATTR_BRAND, brand, sizeof (brand));
-	for (i = 0; i < nbrands; i++) {
-	        if (strcmp(brand, name_list[i]) == 0) {
-	                return (B_TRUE);
-	        }
+	
+	if (getzonenamebyid(zid, zonename, sizeof(zonename))!= -1) {
+		if( zone_get_brand(zonename, brand, sizeof(brand)) == Z_OK) {
+			for (i = 0; i < nbrands; i++) {
+			        if (strcmp(brand, name_list[i]) == 0) {
+			                return (B_TRUE);
+			        }
+			}
+		}
 	}
 	return (B_FALSE);
 }
