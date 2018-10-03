@@ -148,9 +148,10 @@ for disk in root.findall('./attr[@name="disk"]'):
 # Network
 
 def get_mac(ifname):
-    ret = subprocess.run(['/usr/sbin/dladm', 'show-vnic',
+    ret = subprocess.Popen(['/usr/sbin/dladm', 'show-vnic',
         '-p', '-o', 'macaddress', ifname], stdout=subprocess.PIPE)
-    mac = ret.stdout.decode('utf-8').strip()
+    (stdout, stderr) = ret.communicate()
+    mac = stdout.decode('utf-8').strip()
     # Need to zero-pad the bytes
     return ':'.join(l.zfill(2) for l in mac.split(':'))
 
@@ -177,14 +178,15 @@ elif opts['vnc'] == 'off':
     opts['vnc'] = 'none'
 args.extend(['-vnc', opts['vnc']])
 
-logging.info('Final arguments: {0}'.format(pformat(args)))
+logging.info('Final arguments: {0}'.format(" ".join(args)))
 
 while True:
     logging.info('Starting kvm')
-    ret = subprocess.run(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    ret = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    (stdout, stderr) = ret.communicate() 
     logging.info("KVM exited {0}".format(ret.returncode))
-    logging.error("Error {0}".format(ret.stderr))
-    logging.debug("Output {0}".format(ret.stdout))
+    logging.error("Error {0}".format(stderr))
+    logging.debug("Output {0}".format(stdout))
     if ret.returncode != 0: break
 
 # Vim hints
