@@ -171,3 +171,10 @@ set type=string
 set value=tank/hdd/oi2,serial=1234
 end
 ```
+
+You can connect to kvm vga console of zone with vncviewer and socat. For example:
+```
+# socat TCP-LISTEN:5500  UNIX-CONNECT:/data/zone/oi/root/tmp/vm.vnc 
+$ vncviewer localhost:5500
+```
+
