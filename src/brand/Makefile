@@ -35,6 +35,7 @@ ROOTUSRLIB = $(ROOT)/usr/lib
 ROOTBRAND = $(ROOTUSRLIB)/brand
 ROOTBRANDPKG = $(ROOTBRAND)/ipkg
 ROOTBRANDNLIPKG = $(ROOTBRAND)/nlipkg
+KVMBRANDPKG = $(ROOTBRAND)/kvm
 
 LINKBRANDPKG = /usr/lib/brand/ipkg
 
@@ -46,7 +47,8 @@ ROOTDIRS = \
 	$(ROOTUSRLIB) \
 	$(ROOTBRAND) \
 	$(ROOTBRANDPKG) \
-	$(ROOTBRANDNLIPKG)
+	$(ROOTBRANDNLIPKG) \
+	$(KVMBRANDPKG)
 
 ROOTFILES = \
 	$(ROOTETCBRAND)/pkgrm.conf \
@@ -68,7 +70,13 @@ ROOTFILES = \
 	$(ROOTBRANDPKG)/support \
 	$(ROOTBRANDPKG)/system-unconfigure \
 	$(ROOTBRANDPKG)/uninstall \
-	$(ROOTBRANDNLIPKG)/config.xml
+	$(ROOTBRANDNLIPKG)/config.xml \
+	$(KVMBRANDPKG)/config.xml \
+	$(KVMBRANDPKG)/platform.xml \
+	$(KVMBRANDPKG)/createzone \
+	$(KVMBRANDPKG)/init \
+	$(KVMBRANDPKG)/socat \
+	$(KVMBRANDPKG)/support
 	
 
 BIN = \
@@ -99,7 +107,7 @@ install: $(ROOTFILES)
 
 
 $(ROOT) $(ROOTETC) $(ROOTETCBRAND) $(ROOTETCZONES) $(ROOTUSRLIB) \
-	$(ROOTBRAND) $(ROOTBRANDPKG) $(ROOTBRANDNLIPKG):
+	$(ROOTBRAND) $(ROOTBRANDPKG) $(ROOTBRANDNLIPKG) $(KVMBRANDPKG):
 	mkdir -p $@
 
 $(ROOTBRANDNLIPKG)/config.xml: $(ROOTBRANDNLIPKG) config.xml
@@ -114,3 +122,6 @@ $(ROOTETCZONES)/%: $(ROOTETCZONES) %
 
 $(ROOTBRANDPKG)/%: $(ROOTBRANDPKG) %
 	rm -f $@; $(INSTALL) -f $(ROOTBRANDPKG) -m 0444 $<
+
+$(KVMBRANDPKG)/%: $(KVMBRANDPKG) kvm/%
+	rm -f $@; $(INSTALL) -f $(KVMBRANDPKG) -m 0444 $<

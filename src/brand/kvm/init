@@ -1,0 +1,191 @@
+#!/usr/bin/python2.7
+
+# {{{ CDDL HEADER
+#
+# This file and its contents are supplied under the terms of the
+# Common Development and Distribution License ("CDDL"), version 1.0.
+# You may only use this file in accordance with the terms of version
+# 1.0 of the CDDL.
+#
+# A full copy of the text of the CDDL should have accompanied this
+# source. A copy of the CDDL is also available via the Internet at
+# http://www.illumos.org/license/CDDL.
+#
+# }}}
+
+# Copyright 2018 OmniOS Community Edition (OmniOSce) Association.
+
+import logging, os, subprocess, sys, time
+import xml.etree.ElementTree as etree
+from pprint import pprint, pformat
+
+logging.basicConfig(filename='/tmp/init.log', filemode='w', level=logging.DEBUG)
+
+zonexml = '/etc/zone.xml'
+uuidfile = '/etc/uuid'
+
+# Default values
+opts = {
+    'vcpus':        '1',
+    'ram':          '1G',
+    'diskif':       'virtio',
+    'netif':        'virtio-net-pci',
+    'type':         'generic',
+    'vnc':          'none',
+    'console':      'pipe,id=console0,path=/dev/zconsole',
+    'cpu':          'qemu64',
+    'bootorder':    'cd',
+    'rtc':          'base=utc,driftfix=slew',
+}
+
+aliases = {
+    'diskif': {
+        'virtio':       'virtio',
+        'ahci':         'ahci',
+    },
+    'netif': {
+        'virtio':       'virtio-net-pci',
+    },
+}
+
+try:
+    with open(uuidfile) as file:
+        uuid = file.read().strip()
+        logging.info('Zone UUID: {0}'.format(uuid))
+except:
+    uuid = None
+
+try:
+    cfg = etree.parse(zonexml)
+except:
+    logging.error('Could not parse {0}'.format(zonexml))
+    sys.exit(1)
+root = cfg.getroot()
+logging.info('Parsed {0}'.format(zonexml))
+
+def opt(tag):
+    global opts, root
+    try:
+        el = root.find('./attr[@name="{0}"]'.format(tag))
+        opts[tag] = el.get('value').strip()
+        logging.debug('Found custom {0} attribute - "{1}"'
+            .format(tag, opts[tag]))
+        if tag in aliases:
+            try:
+                opts[tag] = aliases[tag][opts[tag]]
+                logging.debug('  Alias expanded to {0}'.format(opts[tag]))
+            except KeyError:
+                pass
+    except:
+        pass
+
+for tag in opts.keys():
+    opt(tag)
+
+args = ['/usr/bin/qemu-kvm']
+
+name = root.get('name')
+args.extend(['-name', name])
+
+if uuid:
+    args.extend(['-uuid', uuid])
+
+args.extend([
+    '-enable-kvm',
+    '-no-hpet',
+    '-m', opts['ram'],
+    '-smp', opts['vcpus'],
+    '-cpu', opts['cpu'],
+    '-rtc', opts['rtc'],
+    '-pidfile', '/tmp/vm.pid',
+    '-monitor', 'unix:/tmp/vm.monitor,server,nowait,nodelay',
+    '-vga', 'std',
+    '-chardev', opts['console'],
+    '-serial', 'chardev:console0',
+    '-boot', 'order={0}'.format(opts['bootorder']),
+])
+
+# Disks
+
+def diskpath(arg):
+    if arg.startswith('/dev/zvol/rdsk'):
+        return arg
+    return '/dev/zvol/rdsk/{0}'.format(arg)
+
+def add_disk(path, boot=False):
+    global args
+    str = (
+        'file={0},if={1},media=disk,index={2},cache=none'
+            .format(diskpath(path), opts['diskif'], add_disk.index)
+    )
+    if ',serial=' not in str:
+        str += ',serial={0}'.format(add_disk.index)
+    if boot:
+        str += ',boot=on'
+    args.extend(['-drive', str])
+    add_disk.index += 1
+add_disk.index = 0
+
+try:
+    cdrom = root.find('./attr[@name="cdrom"]')
+    args.extend([
+        '-drive',
+        'file={0},if=ide,media=cdrom,index=0,serial=0,cache=none'
+            .format(cdrom.get('value').strip())
+    ])
+except:
+    pass
+
+try:
+    bootdisk = root.find('./attr[@name="bootdisk"]')
+    add_disk(bootdisk.get('value').strip(), True)
+except:
+    pass
+
+for disk in root.findall('./attr[@name="disk"]'):
+    add_disk(disk.get('value').strip())
+
+# Network
+
+def get_mac(ifname):
+    ret = subprocess.run(['/usr/sbin/dladm', 'show-vnic',
+        '-p', '-o', 'macaddress', ifname], stdout=subprocess.PIPE)
+    mac = ret.stdout.decode('utf-8').strip()
+    # Need to zero-pad the bytes
+    return ':'.join(l.zfill(2) for l in mac.split(':'))
+
+vlan = 0
+for f in root.findall('./network[@physical]'):
+    ifname = f.get('physical').strip()
+    mac = get_mac(ifname)
+    if not len(mac): continue
+    args.extend([
+        '-device',
+        '{0},mac={1},tx=timer,x-txtimer=200000,x-txburst=128,vlan={2}'
+            .format(opts['netif'], mac, vlan),
+        '-net',
+        'vnic,vlan={0},name=net{0},ifname={1}'
+            .format(vlan, ifname)
+    ])
+    vlan += 1
+
+# VNC
+
+if opts['vnc'] == 'on':
+    opts['vnc'] = 'unix:/tmp/vm.vnc'
+elif opts['vnc'] == 'off':
+    opts['vnc'] = 'none'
+args.extend(['-vnc', opts['vnc']])
+
+logging.info('Final arguments: {0}'.format(pformat(args)))
+
+while True:
+    logging.info('Starting kvm')
+    ret = subprocess.run(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    logging.info("KVM exited {0}".format(ret.returncode))
+    logging.error("Error {0}".format(ret.stderr))
+    logging.debug("Output {0}".format(ret.stdout))
+    if ret.returncode != 0: break
+
+# Vim hints
+# vim:ts=4:sw=4:et:fdm=marker

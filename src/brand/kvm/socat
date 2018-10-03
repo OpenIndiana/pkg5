@@ -1,0 +1,71 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use IO::Socket::INET;
+use IO::Socket::UNIX qw(SOCK_STREAM);
+use IO::Select;
+
+my ($sock, $port) = @ARGV;
+$port //= 5900;
+my $ip = '0.0.0.0';
+
+my $iosel = IO::Select->new;
+my %connection = ();
+my $socket;
+my $client;
+
+my $server = IO::Socket::INET->new(
+    LocalAddr => $ip,
+    LocalPort => $port,
+    ReuseAddr => 1,
+    Listen    => 1,
+    ) or die "ERROR: cannot listen on $ip:$port: $!\n";
+$iosel->add($server);
+
+print "Listening on $ip:$port...\n";
+
+while (1)
+{
+	for my $ready ($iosel->can_read)
+	{
+		if ($ready == $server)
+		{
+			$socket = IO::Socket::UNIX->new(
+			    Type => SOCK_STREAM,
+			    Peer => $sock,
+			);
+			if (!$socket)
+			{
+				print "ERROR: cannot open socket $sock: $!\n";
+				next;
+			}
+			$iosel->add($socket);
+
+			$client = $server->accept;
+			$iosel->add($client);
+			$connection{$client} = $socket;
+			$connection{$socket} = $client;
+		}
+		else
+		{
+			next if !exists $connection{$ready};
+			my $buffer;
+			if ($ready->sysread($buffer, 4096))
+			{
+				$connection{$ready}->syswrite($buffer);
+			}
+			else
+			{
+				$iosel->remove($client);
+				$iosel->remove($socket);
+				delete $connection{$client};
+				delete $connection{$socket};
+				$client->close;
+				$socket->close;
+			}
+		}
+	}
+}
+

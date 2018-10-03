@@ -1,0 +1,30 @@
+#
+# CDDL HEADER
+#
+# This file and its contents are supplied under the terms of the
+# Common Development and Distribution License ("CDDL"), version 1.0.
+# You may only use this file in accordance with the terms of version
+# 1.0 of the CDDL.
+#
+# A full copy of the text of the CDDL should have accompanied this
+# source. A copy of the CDDL is also available via the Internet at
+# http://www.illumos.org/license/CDDL.
+#
+# Copyright 2018 OmniOS Community Edition (OmniOSce) Association.
+#
+
+set name=pkg.fmri value=pkg:/system/zones/brand/kvm@$(PKGVERS)
+set name=pkg.summary value="Image Packaging System branded zone - kvm zones"
+set name=pkg.description value="Support for kvm branded zones"
+set name=variant.arch value=$(ARCH)
+dir  path=usr/lib
+dir  path=usr/lib/brand
+dir  path=usr/lib/brand/kvm
+file path=usr/lib/brand/kvm/config.xml mode=0644
+file path=usr/lib/brand/kvm/createzone mode=0755
+file path=usr/lib/brand/kvm/init mode=0755 pkg.depend.bypass-generate=.*
+file path=usr/lib/brand/kvm/platform.xml mode=0644
+file path=usr/lib/brand/kvm/socat mode=0755 pkg.depend.bypass-generate=.*
+file path=usr/lib/brand/kvm/support mode=0755
+depend type=require fmri=network/netcat
+depend type=require fmri=system/qemu/kvm

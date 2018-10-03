@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE zone PUBLIC "-//Sun Microsystems Inc//DTD Zones//EN" "file:///usr/share/lib/xml/dtd/zonecfg.dtd.1">
+<zone name="SYSkvm" zonepath="" autoboot="false" brand="kvm" ip-type="exclusive">
+</zone>

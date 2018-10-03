@@ -1,0 +1,34 @@
+#!/bin/ksh
+
+cmd="${1:?cmd}"
+zone="${2:?zone}"
+root="${3:?root}"
+shift 3
+
+qemu_shutdown()
+{
+	typeset delay=${1:-60}
+	echo system_powerdown | nc -U "$root/root/tmp/vm.monitor" >/dev/null
+	while [ $delay -gt 0 ] && pgrep -z "$zone" qemu >/dev/null; do
+		((delay = delay - 1))
+		sleep 1
+	done
+}
+
+case $cmd in
+    shutdown)
+	qemu_shutdown 0
+	;;
+    prestate)
+	case $1:$2 in
+	    4:4) # halting (even as part of rebooting)
+		qemu_shutdown 60
+		;;
+	esac
+	;;
+    poststate)
+	;;
+esac
+
+exit 0
+
