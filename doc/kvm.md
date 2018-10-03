@@ -1,5 +1,5 @@
 
-# KWM branded-zone support
+# KVM branded-zone support
 
 KVM branded zones are configured mainly via custom attributes in the zone
 configuration.
