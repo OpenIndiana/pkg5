@@ -2201,8 +2201,8 @@ def apply_hot_fix(**args):
                                 hdl.setopt(pycurl.NOPROGRESS, False)
                         try:
                                 hdl.perform()
-                        except pycurl.error, error:
-                                errno, errstr = error
+                        except pycurl.error as err:
+                                errno, errstr = err
                                 msg("An error occurred: {0}".format(errstr))
                                 return
 
@@ -2297,6 +2297,8 @@ def apply_hot_fix(**args):
         pubargs['proxy_uri'] = None
         pubargs['origin_uri'] = None
         pubargs['remove_origins'] = set([])
+        pubargs['enable_origins'] = set([])
+        pubargs['disable_origins'] = set([])
         pubargs['repo_uri'] = None
         pubargs['unset_props'] = set([])
 
