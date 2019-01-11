@@ -22,6 +22,7 @@
 
 #
 # Copyright (c) 2007, 2016, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2019 OmniOS Community Edition (OmniOSce) Association.
 #
 
 from __future__ import print_function
@@ -2438,7 +2439,17 @@ class ImagePlan(object):
                                         if fmristr in skip_fmris:
                                                 continue
                                         act = pkg.actions.fromstr(actstr)
-                                        assert act.attrs[act.key_attr] == key
+                                        if act.attrs[act.key_attr] != key:
+                                                raise api_errors.InvalidPackageErrors([
+                                                    "{} has invalid manifest "
+                                                    "line:".format(
+                                                    fmristr),
+						    "    '{}'".format(actstr),
+                                                    "    '{}' != '{}'".format(
+                                                        act.attrs[act.key_attr],
+                                                        key
+                                                    )
+                                                    ])
                                         assert pns is None or \
                                             act.namespace_group == pns
                                         pns = act.namespace_group
