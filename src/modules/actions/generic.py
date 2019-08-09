@@ -1037,8 +1037,8 @@ class Action(object):
                             expected_id=group))
 
                 if mode is not None and stat.S_IMODE(lstat.st_mode) != mode:
-                        errors.append(_("Mode: {found:o} should be "
-                            "{expected:o}").format(
+                        errors.append(_("Mode: {found:04o} should be "
+                            "{expected:04o}").format(
                             found=stat.S_IMODE(lstat.st_mode),
                             expected=mode))
                 return lstat, errors, warnings, info, abort
