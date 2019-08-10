@@ -5982,6 +5982,9 @@ def handle_errors(func, non_wrap_print=True, *args, **kwargs):
                 error(_("Linked image exception(s):\n{0}").format(
                       str(__e)))
                 __ret = __e.lix_exitrv
+        except api_errors.PlanCreationException as __e:
+                error(__e)
+                __ret = EXIT_OOPS
         except api_errors.CertificateError as __e:
                 if _api_inst:
                         _api_inst.abort(result=RESULT_FAILED_CONFIGURATION)
