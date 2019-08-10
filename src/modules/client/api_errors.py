@@ -3109,7 +3109,8 @@ class LinkedImageException(ApiException):
                             rv=rv, cmd=cmd)
                         if errout:
                                 err += _("\nAnd generated the following error "
-                                    "message:\n{errout}".format(errout=errout))
+                                    "message:\n{errout}".format(
+                                    errout=errout.decode()))
 
                 if cmd_output_invalid is not None:
                         (cmd, output) = cmd_output_invalid
@@ -3206,7 +3207,7 @@ return value of {exitrv:d} and generated the following output:
                                     lin=lin,
                                     op=op,
                                     exitrv=exitrv,
-                                    errout=errout,
+                                    errout=errout.decode(),
                                )
                         else:
                                 err = _("""
@@ -3221,7 +3222,7 @@ The child generated the following output:
                                 ).format(
                                     lin=lin,
                                     op=op,
-                                    errout=errout,
+                                    errout=errout.decode(),
                                     e=e,
                                )
 
@@ -3250,7 +3251,7 @@ The child generated the following output:
                                     lin=lin,
                                     op=op,
                                     e=e,
-                                    errout=errout,
+                                    errout=errout.decode(),
                                )
 
                 # set default error return value
