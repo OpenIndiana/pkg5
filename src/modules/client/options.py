@@ -1336,7 +1336,7 @@ pkg_op_opts = {
     pkgdefs.PKG_OP_SET_PROP_LINKED: opts_set_property_linked,
     pkgdefs.PKG_OP_SYNC           : opts_sync_linked,
     pkgdefs.PKG_OP_UNINSTALL      : opts_uninstall,
-    pkgdefs.PKG_OP_UNSET_PUBLISHER: [],
+    pkgdefs.PKG_OP_UNSET_PUBLISHER: None,
     pkgdefs.PKG_OP_UPDATE         : opts_update,
     pkgdefs.PKG_OP_APPLY_HOT_FIX  : opts_apply_hot_fix,
     pkgdefs.PKG_OP_VERIFY         : opts_verify

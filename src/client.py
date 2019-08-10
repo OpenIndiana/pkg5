@@ -5857,7 +5857,7 @@ def main_func():
         # Get the available options for the requested operation to create the
         # getopt parsing strings.
         valid_opts = options.get_pkg_opts(subcommand, add_table=cmd_opts)
-        if not valid_opts:
+        if valid_opts is None:
                 # if there are no options for an op, it has its own processing
                 try:
                         return func(api_inst, pargs)

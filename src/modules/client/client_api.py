@@ -130,21 +130,23 @@ def _get_pkg_output_schema(subcommand):
 
 def __get_pkg_input_schema(pkg_op, opts_mapping=misc.EmptyDict):
         properties = {}
-        for entry in options.pkg_op_opts[pkg_op]:
-                if type(entry) != tuple:
-                        continue
-                if len(entry) == 4:
-                        opt, dummy_default, dummy_valid_args, \
-                            schema = entry
+        opts = options.pkg_op_opts[pkg_op]
+        if opts is not None:
+                for entry in opts:
+                        if type(entry) != tuple:
+                                continue
+                        if len(entry) == 4:
+                                opt, dummy_default, dummy_valid_args, \
+                                    schema = entry
 
-                        if opt in opts_mapping:
-                                optn = opts_mapping[opt]
-                                if optn:
-                                        properties[optn] = schema
+                                if opt in opts_mapping:
+                                        optn = opts_mapping[opt]
+                                        if optn:
+                                                properties[optn] = schema
+                                        else:
+                                                properties[opt] = schema
                                 else:
                                         properties[opt] = schema
-                        else:
-                                properties[opt] = schema
 
         arg_name = "pargs_json"
         input_schema = \
