@@ -2335,7 +2335,8 @@ def apply_hot_fix(**args):
                 filepath = urlparse(origin, "file", allow_fragments=0)[2]
                 shutil.copy2(unquote(filepath), tmp_pth)
                 origin = misc.parse_uri(tmp_pth, cwd=orig_cwd)
-        elif origin.startswith("http://") or origin.startswith("https://"):
+        elif origin.startswith("http://") or origin.startswith("https://") or \
+            origin.startswith("ftp://"):
                 # Download file to temporary area
 
                 if not args['quiet']:
