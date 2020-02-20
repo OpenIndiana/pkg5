@@ -22,6 +22,7 @@
 
 #
 # Copyright (c) 2015, 2017, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 
 
@@ -31,7 +32,6 @@ import datetime
 import errno
 import getopt
 import itertools
-import simplejson as json
 import os
 import re
 import six
@@ -41,7 +41,6 @@ import tempfile
 import textwrap
 import time
 import traceback
-import jsonschema
 
 from six.moves import filter, map, range
 
@@ -55,6 +54,7 @@ import pkg.client.linkedimage as li
 import pkg.client.publisher as publisher
 import pkg.client.options as options
 import pkg.fmri as fmri
+import pkg.json as json
 import pkg.misc as misc
 import pkg.pipeutils as pipeutils
 import pkg.portable as portable
@@ -540,8 +540,8 @@ def __prepare_json(status, op=None, schema=None, data=None, errors=None):
         if op:
                 op_schema = _get_pkg_output_schema(op)
                 try:
-                        jsonschema.validate(ret_json, op_schema)
-                except jsonschema.ValidationError as e:
+                        json.validate(ret_json, op_schema)
+                except json.ValidationError as e:
                         newret_json = {"status": EXIT_OOPS,
                             "errors": [{"reason": str(e)}]}
                         return newret_json
@@ -2898,9 +2898,9 @@ def __pkg(subcommand, pargs_json, opts_json, pkg_image=None,
                 # Validate JSON input with JSON schema.
                 input_schema = _get_pkg_input_schema(subcommand,
                     opts_mapping=opts_mapping)
-                jsonschema.validate({arg_name: pargs, "opts_json": opts},
+                json.validate({arg_name: pargs, "opts_json": opts},
                     input_schema)
-        except jsonschema.ValidationError as e:
+        except json.ValidationError as e:
                 return None, __prepare_json(EXIT_BADOPT,
                     errors=[{"reason": str(e)}])
 

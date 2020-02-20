@@ -22,13 +22,13 @@
 
 #
 # Copyright (c) 2009, 2017, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 
 import errno
 import itertools
 import os
 import shutil
-import simplejson as json
 import six
 import sys
 import tempfile
@@ -45,6 +45,7 @@ import pkg.client.api_errors as apx
 import pkg.client.publisher as pub
 import pkg.client.transport.exception as tx
 import pkg.config as cfg
+import pkg.json as json
 import pkg.p5p
 import pkg.server.repository as svr_repo
 import pkg.server.query_parser as sqp

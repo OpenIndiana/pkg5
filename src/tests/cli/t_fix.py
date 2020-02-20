@@ -21,6 +21,7 @@
 #
 
 # Copyright (c) 2008, 2017, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 
 from . import testutils
 if __name__ == "__main__":
@@ -33,11 +34,11 @@ import pkg.manifest as manifest
 import pkg.portable as portable
 import pkg.misc as misc
 import shutil
-import simplejson as json
 import tempfile
 import time
 import unittest
 
+import pkg.json as json
 
 class TestFix(pkg5unittest.SingleDepotTestCase):
 

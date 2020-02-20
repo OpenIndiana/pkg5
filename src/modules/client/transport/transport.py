@@ -22,6 +22,7 @@
 
 #
 # Copyright (c) 2009, 2015, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 
 from __future__ import  print_function
@@ -29,7 +30,6 @@ import copy
 import datetime as dt
 import errno
 import os
-import simplejson as json
 import six
 import tempfile
 import zlib
@@ -55,6 +55,7 @@ import pkg.client.progress as progress
 import pkg.digest as digest
 import pkg.file_layout.file_manager as fm
 import pkg.fmri
+import pkg.json as json
 import pkg.manifest as manifest
 import pkg.misc as misc
 import pkg.nrlock as nrlock

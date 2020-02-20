@@ -22,6 +22,7 @@
 
 #
 # Copyright (c) 2008, 2016, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 
 from . import testutils
@@ -30,7 +31,6 @@ if __name__ == "__main__":
 import pkg5unittest
 
 import os
-import simplejson as json
 import six
 import pkg.catalog as catalog
 import pkg.config as cfg
@@ -51,6 +51,7 @@ import zlib
 
 from pkg.actions import fromstr
 from pkg.digest import DEFAULT_HASH_FUNC
+import pkg.json as json
 from six.moves.urllib.parse import urlparse
 from six.moves.urllib.request import url2pathname
 

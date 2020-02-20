@@ -22,7 +22,7 @@
 
 #
 # Copyright (c) 2007, 2019, Oracle and/or its affiliates. All rights reserved.
-# Copyright 2017 OmniOS Community Edition (OmniOSce) Association.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 
 import atexit
@@ -35,7 +35,6 @@ import hashlib
 import os
 import platform
 import shutil
-import simplejson as json
 import six
 import stat
 import sys
@@ -65,6 +64,7 @@ import pkg.client.transport.transport   as transport
 import pkg.config                       as cfg
 import pkg.file_layout.layout           as fl
 import pkg.fmri
+import pkg.json                         as json
 import pkg.lockfile                     as lockfile
 import pkg.manifest                     as manifest
 import pkg.mediator                     as med
@@ -4805,7 +4805,7 @@ in the environment or by setting simulate_cmdpath in DebugValues.""")
 
                 return img.imageplan.nothingtodo()
 
-        # avoid set implementation uses simplejson to store a set of pkg_stems
+        # avoid set implementation uses json to store a set of pkg_stems
         # being avoided (explicitly or implicitly), and a set of tracked stems
         # that are obsolete.
         #
@@ -4904,7 +4904,7 @@ in the environment or by setting simulate_cmdpath in DebugValues.""")
 
                 self.__avoid_set_altered = False
 
-        # frozen dict implementation uses simplejson to store a dictionary of
+        # frozen dict implementation uses json to store a dictionary of
         # pkg_stems that are frozen, the versions at which they're frozen, and
         # the reason, if given, why the package was frozen.
         #

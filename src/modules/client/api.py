@@ -22,7 +22,7 @@
 
 #
 # Copyright (c) 2008, 2019, Oracle and/or its affiliates. All rights reserved.
-# Copyright 2019 OmniOS Community Edition (OmniOSce) Association.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 
 """This module provides the supported, documented interface for clients to
@@ -63,7 +63,6 @@ import fnmatch
 import glob
 import os
 import shutil
-import simplejson as json
 import sys
 import tempfile
 import threading
@@ -90,6 +89,7 @@ import pkg.client.plandesc as plandesc
 import pkg.client.publisher as publisher
 import pkg.client.query_parser as query_p
 import pkg.fmri as fmri
+import pkg.json as json
 import pkg.mediator as med
 import pkg.misc as misc
 import pkg.nrlock
@@ -1599,7 +1599,7 @@ in the environment or by setting simulate_cmdpath in DebugValues.""")
                         pd_json1 = self.__plan_desc.getstate(self.__plan_desc,
                             reset_volatiles=True)
                         fobj = tempfile.TemporaryFile(mode="w+")
-                        json.dump(pd_json1, fobj, encoding="utf-8")
+                        json.dump(pd_json1, fobj)
                         pd_new = plandesc.PlanDescription(_op)
                         pd_new._load(fobj)
                         pd_json2 = pd_new.getstate(pd_new, reset_volatiles=True)

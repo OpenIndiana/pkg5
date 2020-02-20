@@ -22,6 +22,7 @@
 
 #
 # Copyright (c) 2008, 2017, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 
 #
@@ -35,7 +36,6 @@ import inspect
 import itertools
 import math
 import sys
-import simplejson as json
 import time
 from collections import deque
 from functools import wraps
@@ -48,6 +48,7 @@ import six
 import pkg.client.pkgdefs as pkgdefs
 import pkg.client.publisher as publisher
 import pkg.fmri
+import pkg.json as json
 import pkg.misc as misc
 
 from pkg.client import global_settings

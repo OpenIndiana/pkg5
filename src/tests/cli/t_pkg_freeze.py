@@ -22,6 +22,7 @@
 
 #
 # Copyright (c) 2011, 2016, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 
 from . import testutils
@@ -30,11 +31,11 @@ if __name__ == "__main__":
 import pkg5unittest
 
 import os
-import simplejson as json
 import stat
 import time
 
 import pkg.client.api_errors as apx
+import pkg.json as json
 import pkg.fmri as fmri
 
 class TestPkgFreeze(pkg5unittest.SingleDepotTestCase):

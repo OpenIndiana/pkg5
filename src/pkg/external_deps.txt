@@ -12,7 +12,7 @@
     pkg:/library/python/pybonjour-35
     pkg:/library/python/pycurl-35
     pkg:/library/python/pyopenssl-35
-    pkg:/library/python/simplejson-35
+    pkg:/library/python/rapidjson-35
     pkg:/library/python/six-35
     pkg:/package/svr4
     pkg:/runtime/python-35

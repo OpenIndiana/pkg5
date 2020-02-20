@@ -50,7 +50,7 @@ class TestP5I(pkg5unittest.Pkg5TestCase):
 
         #
         # Whitespace (or lack thereof) at the ends of some lines in the below is
-        # significant. It's also a function of which simplejson version you're
+        # significant. It's also a function of which json version you're
         # running/using.
         #
         p5i_bobcat = """{

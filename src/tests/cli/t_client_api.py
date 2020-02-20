@@ -22,6 +22,7 @@
 
 #
 # Copyright (c) 2015, 2016, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 
 from . import testutils
@@ -32,8 +33,7 @@ import pkg5unittest
 import os
 import pkg.client.client_api as cli_api
 import pkg.client.progress as progress
-import simplejson as json
-import jsonschema
+import pkg.json as json
 
 from pkg.client import global_settings
 
@@ -209,7 +209,7 @@ class TestClientApi(pkg5unittest.ManyDepotTestCase):
                 """Test if the input is valid against the schema."""
 
                 try:
-                        jsonschema.validate(input, schema)
+                        json.validate(input, schema)
                         return True
                 except Exception as e:
                         return False

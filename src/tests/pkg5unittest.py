@@ -20,6 +20,7 @@
 #
 
 # Copyright (c) 2008, 2017, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 
 #
 # Define the basic classes that all test cases are inherited from.
@@ -49,7 +50,6 @@ import os
 import pprint
 import shutil
 import signal
-import simplejson as json
 import six
 import stat
 import subprocess
@@ -81,6 +81,7 @@ from six.moves.urllib.request import urlopen
 from socket import error as socketerror
 
 import pkg.client.api_errors as apx
+import pkg.json as json
 import pkg.misc as misc
 import pkg.client.publisher as publisher
 import pkg.portable as portable

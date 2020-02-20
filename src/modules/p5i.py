@@ -22,10 +22,10 @@
 
 #
 # Copyright (c) 2009, 2015, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 
 import os
-import simplejson as json
 
 from six.moves.urllib.error import HTTPError
 from six.moves.urllib.parse import urlunparse
@@ -33,6 +33,7 @@ from six.moves.urllib.request import urlopen, pathname2url
 
 import pkg.client.api_errors as api_errors
 import pkg.client.publisher as publisher
+import pkg.json as json
 import pkg.fmri as fmri
 
 CURRENT_VERSION = 1

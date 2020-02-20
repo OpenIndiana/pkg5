@@ -22,6 +22,7 @@
 
 #
 # Copyright (c) 2012, 2016, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 
 """
@@ -40,7 +41,6 @@ modified within an image during an image-modifying operation.
 import collections
 import itertools
 import operator
-import simplejson as json
 import six
 
 import pkg.actions
@@ -50,6 +50,7 @@ import pkg.client.linkedimage as li
 import pkg.client.pkgplan
 import pkg.facet
 import pkg.fmri
+import pkg.json as json
 import pkg.misc
 import pkg.version
 
@@ -326,7 +327,7 @@ class PlanDescription(object):
                     reset_volatiles=reset_volatiles)
                 try:
                         fobj.truncate()
-                        json.dump(state, fobj, encoding="utf-8")
+                        json.dump(state, fobj)
                         fobj.flush()
                 except OSError as e:
                         # Access to protected member; pylint: disable=W0212
@@ -342,8 +343,7 @@ class PlanDescription(object):
 
                 try:
                         fobj.seek(0)
-                        state = json.load(fobj, encoding="utf-8",
-                            object_hook=pkg.misc.json_hook)
+                        state = json.load(fobj, object_hook=pkg.misc.json_hook)
                 except OSError as e:
                         # Access to protected member; pylint: disable=W0212
                         raise apx._convert_error(e)

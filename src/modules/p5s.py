@@ -22,15 +22,16 @@
 
 #
 # Copyright (c) 2011, 2016, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 
 import copy
 import os
-import simplejson as json
 from six.moves.urllib.parse import urlparse, urlunparse
 
 import pkg.client.api_errors as api_errors
 import pkg.client.publisher as publisher
+import pkg.json as json
 import pkg.digest as digest
 import pkg.fmri as fmri
 from pkg.client.imageconfig import DEF_TOKEN

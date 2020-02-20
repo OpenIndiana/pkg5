@@ -21,6 +21,7 @@
 #
 
 # Copyright (c) 2008, 2016, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 
 from . import testutils
 if __name__ == "__main__":
@@ -30,11 +31,12 @@ import pkg5unittest
 import os
 import pkg.portable as portable
 import shutil
-import simplejson as json
 import subprocess
 import tempfile
 import time
 import unittest
+
+import pkg.json as json
 
 class TestPkgVerify(pkg5unittest.SingleDepotTestCase):
         # Tests in this suite use the read only data directory

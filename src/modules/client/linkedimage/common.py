@@ -22,6 +22,7 @@
 
 #
 # Copyright (c) 2011, 2017, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 
 """
@@ -47,7 +48,6 @@ import itertools
 import operator
 import os
 import select
-import simplejson as json
 
 # Redefining built-in 'reduce', 'zip'; pylint: disable=W0622
 # Imports from package six are not grouped: pylint: disable=C0412
@@ -69,6 +69,7 @@ import pkg.client.pkgremote
 import pkg.client.progress as progress
 import pkg.facet
 import pkg.fmri
+import pkg.json as json
 import pkg.misc as misc
 import pkg.pkgsubprocess
 import pkg.version
@@ -3603,6 +3604,21 @@ def get_inheritable_facets(img, pd=None):
 def save_data(path, data, root="/", catch_exception=True):
         """Save JSON encoded linked image metadata to a file."""
 
+        def PkgEncode(obj):
+                """Required routine that overrides the default base
+                class version.  This routine must serialize 'obj' when
+                attempting to save 'obj' json format."""
+
+                if isinstance(obj, (pkg.fmri.PkgFmri,
+                    pkg.client.linkedimage.common.LinkedImageName)):
+                        return str(obj)
+
+                if isinstance(obj, pkgplan.PkgPlan):
+                        return obj.getstate()
+
+                if isinstance(obj, (set, frozenset)):
+                        return list(obj)
+
         # make sure the directory we're about to save data into exists.
         path_dir = os.path.dirname(path)
         pathtmp = "{0}.{1:d}.tmp".format(path, os.getpid())
@@ -3616,8 +3632,7 @@ def save_data(path, data, root="/", catch_exception=True):
                 fd = ar.ar_open(root, pathtmp, os.O_WRONLY,
                     mode=0o644, create=True, truncate=True)
                 fobj = os.fdopen(fd, "w")
-                json.dump(data, fobj, encoding="utf-8",
-                    cls=pkg.client.linkedimage.PkgEncoder)
+                json.dump(data, fobj, default=PkgEncode)
                 fobj.close()
 
                 # atomically create the desired file
@@ -3643,8 +3658,7 @@ def load_data(path, missing_ok=False, root="/", decode=True,
 
                 fd = ar.ar_open(root, path, os.O_RDONLY)
                 fobj = os.fdopen(fd, "r")
-                data = json.load(fobj, encoding="utf-8",
-                    object_hook=object_hook)
+                data = json.load(fobj, object_hook=object_hook)
                 fobj.close()
         except OSError as e:
                 # W0212 Access to a protected member
@@ -3653,30 +3667,6 @@ def load_data(path, missing_ok=False, root="/", decode=True,
                         raise apx._convert_error(e)
                 raise apx._convert_error(e)
         return data
-
-
-class PkgEncoder(json.JSONEncoder):
-        """Utility class used when json encoding linked image metadata."""
-
-        # E0202 An attribute inherited from JSONEncoder hide this method
-        # pylint: disable=E0202
-        def default(self, obj):
-                """Required routine that overrides the default base
-                class version.  This routine must serialize 'obj' when
-                attempting to save 'obj' json format."""
-
-                if isinstance(obj, (pkg.fmri.PkgFmri,
-                    pkg.client.linkedimage.common.LinkedImageName)):
-                        return str(obj)
-
-                if isinstance(obj, pkgplan.PkgPlan):
-                        return obj.getstate()
-
-                if isinstance(obj, (set, frozenset)):
-                        return list(obj)
-
-                return json.JSONEncoder.default(self, obj)
-
 
 def PkgDecoder(dct):
         """Utility class used when json decoding linked image metadata."""

@@ -20,7 +20,7 @@
 #
 # Copyright (c) 2010, 2019, Oracle and/or its affiliates. All rights reserved.
 # Copyright (c) 2012, OmniTI Computer Consulting, Inc. All rights reserved.
-# Copyright 2018 OmniOS Community Edition (OmniOSce) Association.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 
 <transform file path=usr/bin/ -> set pkg.depend.bypass-generate .*six.*>
@@ -163,6 +163,7 @@ file path=$(PYDIRVP)/pkg/flavor/smf_manifest.py \
     pkg.depend.bypass-generate=.*six.*
 file path=$(PYDIRVP)/pkg/fmri.py pkg.depend.bypass-generate=.*six.*
 file path=$(PYDIRVP)/pkg/indexer.py pkg.depend.bypass-generate=.*six.*
+file path=$(PYDIRVP)/pkg/json.py pkg.depend.bypass-generate=.*six.*
 dir  path=$(PYDIRVP)/pkg/lint
 file path=$(PYDIRVP)/pkg/lint/__init__.py
 file path=$(PYDIRVP)/pkg/lint/base.py pkg.depend.bypass-generate=.*six.*
@@ -497,6 +498,6 @@ depend type=require fmri=library/python/prettytable-35
 depend type=require fmri=library/python/pybonjour-35
 depend type=require fmri=library/python/pycurl-35
 depend type=require fmri=library/python/pyopenssl-35
-depend type=require fmri=library/python/simplejson-35@3.6.5
+depend type=require fmri=library/python/rapidjson-35
 depend type=require fmri=library/python/six-35
 depend type=require fmri=locale/en

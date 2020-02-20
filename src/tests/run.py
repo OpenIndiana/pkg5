@@ -22,12 +22,12 @@
 
 #
 # Copyright (c) 2008, 2017, Oracle and/or its affiliates. All rights reserved.
-# Copyright 2018 OmniOS Community Edition (OmniOSce) Association.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 
 from __future__ import print_function
-import simplejson as json
 import multiprocessing
+import json as stdlibjson
 import os
 import sys
 from functools import reduce
@@ -443,7 +443,7 @@ if __name__ == "__main__":
         timing_history = os.path.join(os.getcwd(), ".timing_history.txt")
         if os.path.exists(timing_history):
                 with open(timing_history, "r") as fh:
-                        ver, time_estimates = json.load(fh)
+                        ver, time_estimates = stdlibjson.load(fh)
 
         api_suite = find_tests("api", onlyval, startattest, output,
             time_estimates)

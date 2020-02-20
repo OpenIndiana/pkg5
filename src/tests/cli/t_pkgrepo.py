@@ -22,6 +22,7 @@
 
 #
 # Copyright (c) 2010, 2016, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 
 from . import testutils
@@ -36,13 +37,13 @@ import pkg.catalog
 import pkg.manifest
 import pkg.depotcontroller as dc
 import pkg.fmri as fmri
-import pkg.pkggzip
+import pkg.json as json
 import pkg.misc as misc
+import pkg.pkggzip
 import pkg.server.repository as sr
 import pkg.client.api_errors as apx
 import pkg.p5p
 import shutil
-import simplejson as json
 import six
 import subprocess
 import tempfile
@@ -1622,34 +1623,34 @@ publisher\tprefix\texample.net
                         # json output.
                         self.pkgrepo("list -s {0} -F json".format(src))
                         expected = """\
-[{"branch": "0", "build-release": "5.11", "name": "amber", \
-"pkg.fmri": "pkg://test/amber@4.0,5.11-0:20110804T203458Z", \
-"pkg.obsolete": [{"value": ["true"]}], "publisher": "test", \
-"release": "4.0", "timestamp": "20110804T203458Z", \
-"version": "4.0,5.11-0:20110804T203458Z"}, \
-{"branch": "0", "build-release": "5.11", "name": "amber", \
-"pkg.fmri": "pkg://test/amber@3.0,5.11-0:20110804T203458Z", \
-"pkg.renamed": [{"value": ["true"]}], "publisher": "test", \
-"release": "3.0", "timestamp": "20110804T203458Z", \
-"version": "3.0,5.11-0:20110804T203458Z"}, \
-{"branch": "0", "build-release": "5.11", "name": "amber", \
-"pkg.fmri": "pkg://test/amber@2.0,5.11-0:20110804T203458Z", \
-"publisher": "test", "release": "2.0", "timestamp": "20110804T203458Z", \
-"version": "2.0,5.11-0:20110804T203458Z"}, \
-{"branch": "0", "build-release": "5.11", "name": "amber", \
-"pkg.fmri": "pkg://test/amber@1.0,5.11-0:20110804T203458Z", \
-"pkg.human-version": [{"value": ["1.0a"]}], \
-"pkg.summary": [{"value": ["Millenia old resin"]}], \
-"publisher": "test", "release": "1.0", "timestamp": "20110804T203458Z", \
-"version": "1.0,5.11-0:20110804T203458Z"}, \
-{"branch": "0", "build-release": "5.11", \
-"info.classification": [{"value": ["org.opensolaris.category.2008:System/Core"]}], \
-"name": "tree", "pkg.fmri": "pkg://test/tree@1.0,5.11-0:20110804T203458Z", \
-"pkg.summary": [{"value": ["Leafy SPARC package"], "variant.arch": ["sparc"]}, \
-{"value": ["Leafy i386 package"], "variant.arch": ["i386"]}], \
-"publisher": "test", "release": "1.0", "timestamp": "20110804T203458Z", \
-"variant.arch": [{"value": ["i386", "sparc"]}], \
-"version": "1.0,5.11-0:20110804T203458Z"}]"""
+[{"branch":"0","build-release":"5.11","name":"amber",\
+"pkg.fmri":"pkg://test/amber@4.0,5.11-0:20110804T203458Z",\
+"pkg.obsolete":[{"value":["true"]}],"publisher":"test",\
+"release":"4.0","timestamp":"20110804T203458Z",\
+"version":"4.0,5.11-0:20110804T203458Z"},\
+{"branch":"0","build-release":"5.11","name":"amber",\
+"pkg.fmri":"pkg://test/amber@3.0,5.11-0:20110804T203458Z",\
+"pkg.renamed":[{"value":["true"]}],"publisher":"test",\
+"release":"3.0","timestamp":"20110804T203458Z",\
+"version":"3.0,5.11-0:20110804T203458Z"},\
+{"branch":"0","build-release":"5.11","name":"amber",\
+"pkg.fmri":"pkg://test/amber@2.0,5.11-0:20110804T203458Z",\
+"publisher":"test","release":"2.0","timestamp":"20110804T203458Z",\
+"version":"2.0,5.11-0:20110804T203458Z"},\
+{"branch":"0","build-release":"5.11","name":"amber",\
+"pkg.fmri":"pkg://test/amber@1.0,5.11-0:20110804T203458Z",\
+"pkg.human-version":[{"value":["1.0a"]}],\
+"pkg.summary":[{"value":["Millenia old resin"]}],\
+"publisher":"test","release":"1.0","timestamp":"20110804T203458Z",\
+"version":"1.0,5.11-0:20110804T203458Z"},\
+{"branch":"0","build-release":"5.11",\
+"info.classification":[{"value":["org.opensolaris.category.2008:System/Core"]}],\
+"name":"tree","pkg.fmri":"pkg://test/tree@1.0,5.11-0:20110804T203458Z",\
+"pkg.summary":[{"value":["Leafy SPARC package"],"variant.arch":["sparc"]},\
+{"value":["Leafy i386 package"],"variant.arch":["i386"]}],\
+"publisher":"test","release":"1.0","timestamp":"20110804T203458Z",\
+"variant.arch":[{"value":["i386","sparc"]}],\
+"version":"1.0,5.11-0:20110804T203458Z"}]"""
                         self.assertEqualDiff(expected, self.output)
 
                 # Now verify list output in different formats but only using

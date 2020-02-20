@@ -22,11 +22,11 @@
 
 #
 # Copyright (c) 2015, 2016, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 
 import os
 import six
-import simplejson as json
 import subprocess
 import traceback
 import pkg
@@ -34,6 +34,7 @@ import pkg.fmri as fmri
 import pkg.client.client_api as entry
 import pkg.client.pkgdefs as pkgdefs
 import pkg.client.progress as progress
+import pkg.json as json
 
 # progress delay.
 PROG_DELAY   = 5.0

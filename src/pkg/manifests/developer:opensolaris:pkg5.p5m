@@ -47,7 +47,7 @@ depend type=require fmri=pkg:/library/python/prettytable-35
 depend type=require fmri=pkg:/library/python/pybonjour-35
 depend type=require fmri=pkg:/library/python/pycurl-35
 depend type=require fmri=pkg:/library/python/pyopenssl-35
-depend type=require fmri=pkg:/library/python/simplejson-35
+depend type=require fmri=pkg:/library/python/rapidjson-35
 depend type=require fmri=pkg:/library/python/six-35
 depend type=require fmri=pkg:/package/svr4
 depend type=require fmri=pkg:/runtime/python-35

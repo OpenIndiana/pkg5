@@ -22,6 +22,7 @@
 
 #
 # Copyright (c) 2010, 2019, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 import pkg.no_site_packages
 
@@ -79,9 +80,9 @@ import pkg.client.progress
 import pkg.client.publisher as publisher
 import pkg.client.transport.transport as transport
 import pkg.fmri as fmri
+import pkg.json as json
 import pkg.misc as misc
 import pkg.server.repository as sr
-import simplejson as json
 
 logger = global_settings.logger
 

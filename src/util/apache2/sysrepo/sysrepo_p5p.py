@@ -20,18 +20,19 @@
 # CDDL HEADER END
 #
 # Copyright (c) 2012, 2016, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 
 from __future__ import print_function
 import pkg.p5p
 
 import os
 import shutil
-import simplejson
 import six
 import sys
 import threading
 import traceback
 from six.moves import http_client
+import pkg.json as json
 from pkg.misc import force_str
 
 # redirecting stdout for proper WSGI portability
@@ -250,8 +251,8 @@ class SysrepoP5p(object):
                             pub=pub)
                         with open(os.path.join(cat_dir, "catalog.attrs"),
                             "rb") as catalog_attrs:
-                                json = simplejson.load(catalog_attrs)
-                                for part in json["parts"]:
+                                ret_json = json.load(catalog_attrs)
+                                for part in ret_json["parts"]:
                                         self.p5p.extract_catalog1(part, cat_dir,
                                             pub=pub)
 

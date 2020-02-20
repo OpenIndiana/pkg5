@@ -22,6 +22,7 @@
 #
 
 # Copyright (c) 2008, 2016, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 
 from __future__ import print_function
 from . import testutils
@@ -32,7 +33,6 @@ import pkg5unittest
 import errno
 import os
 import shutil
-import simplejson
 import six
 import stat
 import unittest
@@ -40,6 +40,7 @@ from functools import cmp_to_key
 
 import pkg.actions
 import pkg.fmri as fmri
+import pkg.json as json
 import pkg.catalog as catalog
 import pkg.client.api_errors as api_errors
 import pkg.manifest as manifest
@@ -1191,11 +1192,11 @@ class TestCorruptCatalog(pkg5unittest.Pkg5TestCase):
                 # corrupt it
                 fname = os.path.join(self.test_root, "catalog.attrs")
                 f = open(fname, "r")
-                struct = simplejson.load(f)
+                struct = json.load(f)
                 f.close()
                 del struct["parts"]
                 f = open(fname, "w")
-                print(simplejson.dumps(struct), file=f)
+                print(json.dumps(struct), file=f)
                 f.close()
 
                 self.assertRaises(api_errors.InvalidCatalogFile,
@@ -1211,13 +1212,13 @@ class TestCorruptCatalog(pkg5unittest.Pkg5TestCase):
                 # corrupt it
                 fname = os.path.join(self.test_root, "catalog.attrs")
                 f = open(fname, "r")
-                struct = simplejson.load(f)
+                struct = json.load(f)
                 f.close()
                 # corrupt signature by one digit
                 sig = int(struct["_SIGNATURE"]["sha-1"], 16)
                 struct["_SIGNATURE"]["sha-1"] = "{0:x}".format(sig + 1)
                 f = open(fname, "w")
-                print(simplejson.dumps(struct), file=f)
+                print(json.dumps(struct), file=f)
                 f.close()
 
                 c = catalog.Catalog(meta_root=self.test_root)
@@ -1236,11 +1237,11 @@ class TestCorruptCatalog(pkg5unittest.Pkg5TestCase):
                 # corrupt it by removing _SIGNATURE
                 fname = os.path.join(self.test_root, "catalog.attrs")
                 f = open(fname, "r")
-                struct = simplejson.load(f)
+                struct = json.load(f)
                 f.close()
                 del struct["_SIGNATURE"]
                 f = open(fname, "w")
-                print(simplejson.dumps(struct), file=f)
+                print(json.dumps(struct), file=f)
                 f.close()
 
                 c = catalog.Catalog(meta_root=self.test_root)
@@ -1259,11 +1260,11 @@ class TestCorruptCatalog(pkg5unittest.Pkg5TestCase):
                 # corrupt it by adding a bad name to the set of parts.
                 fname = os.path.join(self.test_root, "catalog.attrs")
                 f = open(fname, "r")
-                struct = simplejson.load(f)
+                struct = json.load(f)
                 f.close()
                 struct["parts"]["/badpartname/"] = {}
                 f = open(fname, "w")
-                print(simplejson.dumps(struct), file=f)
+                print(json.dumps(struct), file=f)
                 f.close()
 
                 # Catalog constructor should reject busted 'parts'

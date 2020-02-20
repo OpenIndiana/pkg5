@@ -22,6 +22,7 @@
 
 #
 # Copyright (c) 2013, 2019, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 
 import pkg.no_site_packages
@@ -34,7 +35,6 @@ import os
 import re
 import shutil
 import six
-import simplejson as json
 import socket
 import sys
 import traceback
@@ -48,6 +48,7 @@ import pkg
 import pkg.client.api_errors as apx
 import pkg.catalog
 import pkg.config as cfg
+import pkg.json as json
 import pkg.misc as misc
 import pkg.portable as portable
 import pkg.p5i as p5i

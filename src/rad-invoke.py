@@ -22,6 +22,7 @@
 
 #
 # Copyright (c) 2015, 2019, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 
 import pkg.no_site_packages
@@ -33,9 +34,8 @@ import logging
 import os
 import pkg
 import pkg.client.rad_pkg as entry
+import pkg.json as json
 import pkg.misc as misc
-import simplejson as json
-
 
 class _InfoFilter(logging.Filter):
         def filter(self, rec):

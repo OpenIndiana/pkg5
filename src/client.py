@@ -22,7 +22,7 @@
 
 #
 # Copyright (c) 2007, 2019, Oracle and/or its affiliates. All rights reserved.
-# Copyright 2018 OmniOS Community Edition (OmniOSce) Association.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 
 #
@@ -67,7 +67,6 @@ try:
         import getopt
         import gettext
         import itertools
-        import simplejson as json
         import locale
         import logging
         import os
@@ -96,6 +95,7 @@ try:
         import pkg.client.transport.transport as transport
         import pkg.client.options as options
         import pkg.fmri as fmri
+        import pkg.json as json
         import pkg.misc as misc
         import pkg.pipeutils as pipeutils
         import pkg.portable as portable

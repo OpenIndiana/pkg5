@@ -116,8 +116,6 @@ class TestPkgApi(pkg5unittest.SingleDepotTestCase):
             add license license.licensed license=license.licensed must-accept=True
             close """
 
-        # NOTE:  spaces at the end (or lack thereof) here are important for
-        # specific versions of simplejson.
         p5i_bobcat = """{
   "packages": [
     "pkg:/bar@1.0,5.11-0", 

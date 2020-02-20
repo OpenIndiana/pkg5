@@ -20,6 +20,7 @@
 # CDDL HEADER END
 #
 # Copyright (c) 2008, 2017, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 
 from __future__ import print_function
 
@@ -1995,8 +1996,8 @@ class _RepoStore(object):
                                         with codecs.EncodedFile(f, "utf-8") as ef:
                                                 p5i.write(ef, [pub])
                         else:
-                               # we use simpleson.dump() in p5i.write(),
-                               # simplejson module will produce str objects
+                               # we use json.dump() in p5i.write(),
+                               # json module will produce str objects
                                # in Python 3, therefore fp.write()
                                # must support str input.
 

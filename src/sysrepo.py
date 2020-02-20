@@ -22,6 +22,7 @@
 
 #
 # Copyright (c) 2011, 2019, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 
 import pkg.no_site_packages
@@ -33,7 +34,6 @@ import locale
 import logging
 import os
 import shutil
-import simplejson
 import six
 import socket
 import stat
@@ -55,6 +55,7 @@ import pkg.client.api
 import pkg.client.progress as progress
 import pkg.client.api_errors as apx
 import pkg.digest as digest
+import pkg.json as json
 import pkg.misc as misc
 import pkg.portable as portable
 import pkg.p5p as p5p
@@ -341,8 +342,8 @@ def _load_publisher_info(api_inst, image_dir):
 
                 with open(cache_path, "r") as cache_file:
                         try:
-                                pub_info_tuple = simplejson.load(cache_file)
-                        except simplejson.JSONDecodeError:
+                                pub_info_tuple = json.load(cache_file)
+                        except json.JSONDecodeError:
                                 error(_("Invalid config cache file at {0} "
                                     "generating fresh configuration.").format(
                                     cache_path))
@@ -396,8 +397,8 @@ def _store_publisher_info(uri_pub_map, no_uri_pubs, image_dir):
                         pass
 
                 with open(cache_path, "w") as cache_file:
-                        simplejson.dump((uri_pub_map, no_uri_pubs), cache_file,
-                            indent=True)
+                        json.dump((uri_pub_map, no_uri_pubs), cache_file,
+                            indent=4)
                         os.chmod(cache_path, 0o600)
         except IOError as e:
                 error(_("Unable to store config to {cache_path}: {e}").format(

@@ -22,6 +22,7 @@
 
 # Copyright (c) 2007, 2017, Oracle and/or its affiliates. All rights reserved.
 # Copyright 2014, OmniTI Computer Consulting, Inc. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 
 """
 Misc utility functions used by the packaging system.
@@ -44,7 +45,6 @@ import re
 import resource
 import shutil
 import signal
-import simplejson as json
 import socket
 import struct
 import sys
@@ -73,6 +73,7 @@ from six.moves.urllib.request import pathname2url, url2pathname
 import six
 
 import pkg.client.api_errors as api_errors
+import pkg.json as json
 import pkg.portable as portable
 import pkg.digest as digest
 
