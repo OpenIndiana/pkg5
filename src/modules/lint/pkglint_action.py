@@ -22,6 +22,7 @@
 
 #
 # Copyright (c) 2010, 2017, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2020 OmniOS Community Edition (OmniOSce) Association.
 #
 
 from pkg.lint.engine import lint_fmri_successor
@@ -292,6 +293,16 @@ class PkgDupActionChecker(base.ActionChecker):
                     manifest.get_all_variants(), msgid=pkglint_id)
 
         duplicate_gids.pkglint_desc = _("GIDs should be unique.")
+
+        def duplicate_legacy(self, action, manifest, engine, pkglint_id="015"):
+                """Checks for duplicate legacy package names."""
+
+                self.dup_attr_check(["legacy"], "pkg", self.ref_legacy_pkgs,
+                    self.processed_refcount_legacy_pkgs, action, engine,
+                    manifest.get_all_variants(), msgid=pkglint_id)
+
+        duplicate_legacy.pkglint_desc = _(
+            "Legacy package names should be unique.")
 
         def duplicate_refcount_path_attrs(self, action, manifest, engine,
             pkglint_id="007"):
