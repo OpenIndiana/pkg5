@@ -451,7 +451,7 @@ link path=usr/bin/gcc target=foo/gcc-bin1
 hardlink path=usr/bin/gcc target=bar/gcc-bin1
 """
 
-expected_failures["dup-refcount-legacy.mf"] = ["pkglint.dupaction007"]
+expected_failures["dup-refcount-legacy.mf"] = ["pkglint.dupaction015.1"]
 broken_manifests["dup-refcount-legacy.mf"] = \
 """
 #
@@ -2882,7 +2882,8 @@ dir group=sys mode=0755 owner=root path=etc
                 lint_msgs = []
                 # prune out the missing dependency warnings
                 for msg in lint_logger.messages:
-                        if "pkglint.action005.1" not in msg:
+                        if ("pkglint.action005.1" not in msg
+                            and "pkglint.dupaction015.1" not in msg):
                                 lint_msgs.append(msg)
 
                 self.assertTrue(len(lint_msgs) == 0,
@@ -2924,7 +2925,8 @@ dir group=sys mode=0755 owner=root path=etc
                 lint_msgs = []
                 # prune out the missing dependency warnings
                 for msg in lint_logger.messages:
-                        if "pkglint.action005.1" not in msg:
+                        if ("pkglint.action005.1" not in msg
+                            and "pkglint.dupaction015.1" not in msg):
                                 lint_msgs.append(msg)
 
                 self.assertFalse(lint_msgs,
@@ -3110,7 +3112,8 @@ dir group=sys mode=0755 owner=root path=etc
 
                 lint_msgs = []
                 for msg in lint_logger.messages:
-                        if "pkglint.action005.1" not in msg:
+                        if ("pkglint.action005.1" not in msg
+                            and "pkglint.dupaction015.1" not in msg):
                                 lint_msgs.append(msg)
 
                 self.assertTrue(len(lint_msgs) == 2, "Unexpected lint messages "
@@ -3145,7 +3148,8 @@ dir group=sys mode=0755 owner=root path=etc
                 for msg in lint_logger.messages:
                         lint_msgs.append(msg)
 
-                self.assertTrue(len(lint_msgs) == 2, "Unexpected lint messages "
+                self.debug(lint_msgs)
+                self.assertTrue(len(lint_msgs) == 3, "Unexpected lint messages "
                     "produced when linting broken self-dependent renaming with "
                     "legacy pkgs")
                 seen_2_4 = False
@@ -3182,7 +3186,7 @@ dir group=sys mode=0755 owner=root path=etc
                         lint_msgs.append(msg)
 
                 self.debug(lint_msgs)
-                self.assertTrue(len(lint_msgs) == 0, "Unexpected lint messages "
+                self.assertTrue(len(lint_msgs) == 1, "Unexpected lint messages "
                     "produced when linting a compatibility legacy package")
 
                 # the 'legacy' package includes a legacy action which should
@@ -3202,7 +3206,7 @@ dir group=sys mode=0755 owner=root path=etc
                 for msg in lint_logger.messages:
                         lint_msgs.append(msg)
 
-                self.assertTrue(len(lint_msgs) == 0, "Unexpected lint messages "
+                self.assertTrue(len(lint_msgs) == 1, "Unexpected lint messages "
                     "produced when linting a compatibility legacy package")
 
         def test_relative_path(self):
