@@ -464,10 +464,10 @@ class VariantCombinations(object):
                         for variant_name in sorted(self.__simpl_template,
                             reverse=True):
                                 def exclude_name(item):
-                                        return [
+                                        return sorted([
                                             (k, v) for k, v in item
                                             if k != variant_name
-                                        ]
+                                        ])
                                 # For sanity, instead of modifying rel_set on
                                 # the fly, a new working set is created to which
                                 # members or collapsed members of rel_set are
