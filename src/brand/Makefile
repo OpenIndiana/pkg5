@@ -79,9 +79,11 @@ ROOTFILES = \
 	$(KVMBRANDPKG)/socat \
 	$(KVMBRANDPKG)/support \
 	$(KVMBRANDPKG)/createzone \
+	$(BHYVEBRANDPKG)/createzone \
 	$(BHYVEBRANDPKG)/config.xml \
 	$(BHYVEBRANDPKG)/platform.xml \
 	$(BHYVEBRANDPKG)/init \
+	$(BHYVEBRANDPKG)/socat \
 	$(BHYVEBRANDPKG)/support \
 	$(BHYVEBRANDPKG)/uninstall \
 	$(BHYVEBRANDPKG)/firewall.ksh \
@@ -114,7 +116,7 @@ clobber: clean
 	rm -f $(ROOTFILES)
 	rm -fr $(ROOTBRAND)
 
-install: $(ROOTFILES) $(BHYVEBRANDPKG)/createzone $(BHYVEBRANDPKG)/socat
+install: $(ROOTFILES)
 
 
 $(ROOT) $(ROOTETC) $(ROOTETCBRAND) $(ROOTETCZONES) $(ROOTUSRLIB) \
