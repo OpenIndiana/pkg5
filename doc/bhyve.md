@@ -18,7 +18,7 @@ which will be created at `/path/to/zone/root/tmp/init.log`
 | acpi		| on			| on,off
 | bootdisk<sup>1</sup>	| 			| path[,serial=<serno>] | tank/hdd/bhyve1
 | bootorder	| cd			| \[c\]\[d\]
-| bootrom<sup>3</sup>	| BHYVE_RELEASE_CSM	| firmware name\|path to firmware | BHYVE_DEBUG_CSM
+| bootrom<sup>3</sup>	| BHYVE_RELEASE	| firmware name\|path to firmware | BHYVE_DEBUG
 | cdrom<sup>4</sup>		|			| path to ISO		  | /data/iso/FreeBSD-11.1-RELEASE-amd64-bootonly.iso
 | console	| /dev/zconsole<sup>6</sup>	| options		| socket,/tmp/vm.com1,wait
 | disk<sup>1</sup>		| 			| path[,serial=<serno>] | tank/hdd/bhyve2,serial=1234

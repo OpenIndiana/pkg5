@@ -47,7 +47,7 @@ opts = {
     'acpi':         'on',
     'vcpus':        '1',
     'ram':          '1G',
-    'bootrom':      'BHYVE_RELEASE_CSM',
+    'bootrom':      'BHYVE_RELEASE',
     'bootorder':    'cd',
     'hostbridge':   'i440fx',
     'diskif':       'virtio-blk',
@@ -122,7 +122,7 @@ def opt(tag):
         pass
 
 def diskpath(arg):
-    if arg.startswith('/dev'):
+    if arg.startswith('/'):
         return arg
     return '/dev/zvol/rdsk/{0}'.format(arg)
 
