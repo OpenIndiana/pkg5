@@ -17,6 +17,7 @@
     pkg:/package/svr4
     pkg:/runtime/python-35
     pkg:/service/network/dns/mdns
+    pkg:/shell/ksh93
     pkg:/system/header
     pkg:/system/library
     #
