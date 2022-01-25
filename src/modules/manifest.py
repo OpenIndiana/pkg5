@@ -1077,7 +1077,7 @@ class Manifest(object):
                 # together has to be solved somewhere else, though.)
                 if pathname:
                         try:
-                                with open(pathname, "r") as mfile:
+                                with open(pathname, "r", encoding='UTF-8') as mfile:
                                         content = mfile.read()
                         except EnvironmentError as e:
                                 raise apx._convert_error(e)
@@ -1229,7 +1229,7 @@ class Manifest(object):
                         log = lambda x: None
 
                 try:
-                        file_handle = open(file_path, "r")
+                        file_handle = open(file_path, "r", encoding="UTF-8")
                 except EnvironmentError as e:
                         if e.errno != errno.ENOENT:
                                 raise
@@ -1364,7 +1364,7 @@ class Manifest(object):
                                     e.filename)
                         raise
 
-                mfile = os.fdopen(fd, "w")
+                mfile = os.fdopen(fd, "w", encoding="UTF-8")
 
                 #
                 # We specifically avoid sorting manifests before writing
@@ -1668,7 +1668,7 @@ class FactoredManifest(Manifest):
                         except EnvironmentError as e:
                                 raise apx._convert_error(e)
 
-                        f = os.fdopen(fd, "w")
+                        f = os.fdopen(fd, "w", encoding="UTF-8")
                         try:
                                 for a in acts:
                                         f.write("{0}\n".format(a))
@@ -1695,7 +1695,7 @@ class FactoredManifest(Manifest):
                         try:
                                 fd, fn = tempfile.mkstemp(dir=t_dir,
                                     prefix=name + ".")
-                                with os.fdopen(fd, "w") as f:
+                                with os.fdopen(fd, "w", encoding="UTF-8") as f:
                                         f.writelines(refs())
                                 os.chmod(fn, PKG_FILE_MODE)
                                 portable.rename(fn, self.__cache_path(name))
@@ -1745,7 +1745,7 @@ class FactoredManifest(Manifest):
                 if os.path.exists(mpath):
                         # we have cached copy on disk; use it
                         try:
-                                with open(mpath, "r") as f:
+                                with open(mpath, "r", encoding="UTF-8") as f:
                                         self._cache[name] = [
                                             a for a in
                                             (
@@ -1830,7 +1830,7 @@ class FactoredManifest(Manifest):
                         attr_match = _compile_fnpats(attr_match)
 
                 try:
-                        with open(mpath, "r") as f:
+                        with open(mpath, "r", encoding="UTF-8") as f:
                                 for l in f:
                                         a = actions.fromstr(l.rstrip())
                                         if (excludes and
@@ -1889,7 +1889,7 @@ class FactoredManifest(Manifest):
                 mpath = self.__cache_path("manifest.set")
                 if not os.path.exists(mpath):
                         return False
-                with open(mpath, "r") as f:
+                with open(mpath, "r", encoding="UTF-8") as f:
                         for l in f:
                                 a = actions.fromstr(l.rstrip())
                                 if not self.excludes or \

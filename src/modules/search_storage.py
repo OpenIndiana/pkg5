@@ -75,7 +75,7 @@ def consistent_open(data_list, directory, timeout = 1):
                         # in the function is greater than timeout.
                         try:
                                 f = os.path.join(directory, d.get_file_name())
-                                fh = open(f, 'r')
+                                fh = open(f, 'r', encoding='UTF-8')
                                 # If we get here, then the current index file
                                 # is present.
                                 if missing == None:

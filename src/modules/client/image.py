@@ -3702,9 +3702,9 @@ in the environment or by setting simulate_cmdpath in DebugValues.""")
                         of, op = self.temporary_file(close=False)
                         bf, bp = self.temporary_file(close=False)
 
-                        sf = os.fdopen(sf, "w")
-                        of = os.fdopen(of, "w")
-                        bf = os.fdopen(bf, "w")
+                        sf = os.fdopen(sf, "w", encoding="UTF-8")
+                        of = os.fdopen(of, "w", encoding="UTF-8")
+                        bf = os.fdopen(bf, "w", encoding="UTF-8")
 
                         # We need to make sure the files are coordinated.
                         timestamp = int(time.time())
@@ -3837,7 +3837,7 @@ in the environment or by setting simulate_cmdpath in DebugValues.""")
 
                 try:
                         of = open(os.path.join(self.__action_cache_dir,
-                            "actions.offsets"), "r")
+                            "actions.offsets"), "r", encoding="UTF-8")
                 except IOError as e:
                         if e.errno != errno.ENOENT:
                                 raise
@@ -3902,7 +3902,7 @@ in the environment or by setting simulate_cmdpath in DebugValues.""")
                 return the corresponding file object."""
 
                 sf = open(os.path.join(self.__action_cache_dir,
-                    "actions.stripped"), "r")
+                    "actions.stripped"), "r", encoding="UTF-8")
                 sversion = sf.readline().rstrip()
                 stimestamp = sf.readline().rstrip()
                 if internal:
@@ -3917,7 +3917,7 @@ in the environment or by setting simulate_cmdpath in DebugValues.""")
 
                 pth = os.path.join(self.__action_cache_dir, "keys.conflicting")
                 try:
-                        with open(pth, "r") as fh:
+                        with open(pth, "r", encoding="UTF-8") as fh:
                                 version = fh.readline().rstrip()
                                 if version != "VERSION 1":
                                         return None

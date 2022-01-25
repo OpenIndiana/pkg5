@@ -71,6 +71,13 @@ class TestPkgVerify(pkg5unittest.SingleDepotTestCase):
             add file bronze2 mode=644 owner=root group=sys path=/etc/bronze2
             close
             """
+        baz10 = """
+            open baz@1.0,5.11-0:20200308T075512Z
+            add dir mode=0755 owner=root group=sys path=/opt
+            add dir mode=0755 owner=root group=sys path="/opt/моя программа"
+            add file файл mode=0755 owner=root group=sys path="/opt/моя программа/файл"
+            close
+            """
 
         sysattr = """
             open sysattr@1.0-0
@@ -94,7 +101,8 @@ class TestPkgVerify(pkg5unittest.SingleDepotTestCase):
            "dricon_ep": """\n""",
            "permission": "",
            "bronze1": "",
-           "bronze2": ""
+           "bronze2": "",
+           "файл": ""
         }
 
         def setUp(self):
@@ -433,6 +441,20 @@ class TestPkgVerify(pkg5unittest.SingleDepotTestCase):
                 self.pkg_verify("-v foo")
                 self.output.index("etc/preserved")
                 self.output.index("editable file has been changed")
+
+        def test_04_unicode(self):
+                """Ensure that verify can parse unicodee manifests"""
+
+                self.pkgsend_bulk(self.rurl, self.baz10)
+                self.image_create(self.rurl)
+                self.pkg("install foo baz")
+                self.pkg_verify("baz")
+
+                # Should fail with exit code 1 if package is not ok.
+                portable.remove(os.path.join(self.get_img_path(), "opt", "моя программа", "файл"))
+                self.pkg_verify("baz", exit=1)
+                self.assertTrue("Unexpected Exception" not in self.output)
+                self.assertTrue("PACKAGE" in self.output and "STATUS" in self.output)
 
         def test_verify_changed_manifest(self):
                 """Test that running package verify won't change the manifest of

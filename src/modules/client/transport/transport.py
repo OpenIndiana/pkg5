@@ -1686,7 +1686,7 @@ class Transport(object):
                                         continue
 
                                 try:
-                                        mf = open(dl_path)
+                                        mf = open(dl_path, "r", encoding="UTF-8")
                                         mcontent = mf.read()
                                         mf.close()
                                         manifest.FactoredManifest(fmri,
@@ -1776,7 +1776,7 @@ class Transport(object):
                         return False
 
                 if mfstpath:
-                        mf = open(mfstpath)
+                        mf = open(mfstpath, "r", encoding="UTF-8")
                         mcontent = mf.read()
                         mf.close()
                 elif content is not None:

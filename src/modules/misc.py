@@ -508,11 +508,6 @@ def setlocale(category, loc=None, printer=None):
                 printer("Unable to set locale{0}; locale package may be broken "
                     "or\nnot installed.  Reverting to C locale.".format(dl))
                 locale.setlocale(category, "C")
-# Correct preferred encoding so that we don't try to decode files with ascii codec
-        if locale.getpreferredencoding(False) != "UTF-8":
-                locale.setlocale(locale.LC_CTYPE, "en_US.UTF-8")
-                locale.setlocale(locale.LC_COLLATE, "en_US.UTF-8")
-
 def N_(message):
         """Return its argument; used to mark strings for localization when
         their use is delayed by the program."""
