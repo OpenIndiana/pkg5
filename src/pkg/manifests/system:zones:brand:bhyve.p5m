@@ -38,3 +38,4 @@ depend type=require fmri=network/netcat
 depend type=require fmri=system/bhyve
 depend type=require fmri=system/bhyve/firmware
 depend type=require fmri=system/library/bhyve
+depend type=require fmri=library/python/pyyaml-35
