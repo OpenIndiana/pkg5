@@ -27,8 +27,6 @@ set name=pkg.description \
     value="A service that provides a publisher proxy to pkg(5) clients."
 set name=info.classification \
     value=org.opensolaris.category.2008:System/Packaging
-# p5p support in the system repository requires mod_wsgi
-#depend type=require fmri=web/server/apache-22/module/apache-wsgi-26
 set name=org.opensolaris.smf.fmri value=svc:/application/pkg/system-repository \
     value=svc:/application/pkg/system-repository:default
 set name=variant.arch value=$(ARCH)
@@ -72,10 +70,13 @@ file path=var/log/pkg/sysrepo/rewrite.log owner=pkg5srv mode=0644 preserve=true
 license cr_Oracle license=cr_Oracle
 # force a dependency on the six package because we bypass dependency check for it
 depend type=require fmri=library/python/six-35
+depend type=require fmri=library/python/six-39
 #
 # The manual dependency on apache results from our calling apachectl from
 # our method script, and can't be detected by pkgdepend.
 #
 depend type=require fmri=web/server/apache-24
 # p5p support in the system repository requires mod_wsgi
-depend type=require fmri=web/server/apache-24/module/apache-wsgi-35
+depend type=require-any fmri=web/server/apache-24/module/apache-wsgi-35 fmri=web/server/apache-24/module/apache-wsgi-39
+depend type=conditional predicate=runtime/python-35 fmri=web/server/apache-24/module/apache-wsgi-35
+depend type=conditional predicate=runtime/python-39 fmri=web/server/apache-24/module/apache-wsgi-39
