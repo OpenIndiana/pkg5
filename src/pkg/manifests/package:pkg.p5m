@@ -39,18 +39,18 @@ dir  path=$(PYDIRVP)
 dir  path=$(PYDIRVP)/pkg
 file path=$(PYDIRVP)/pkg-0.1-py3.5.egg-info
 file path=$(PYDIRVP)/pkg/__init__.py
-file path=$(PYDIRVP)/pkg/_arch.cpython-35m.so
-file path=$(PYDIRVP)/pkg/_pspawn.cpython-35m.so
-file path=$(PYDIRVP)/pkg/_sha512_t.cpython-35m.so
-file path=$(PYDIRVP)/pkg/_sysattr.cpython-35m.so
-file path=$(PYDIRVP)/pkg/_syscallat.cpython-35m.so
-file path=$(PYDIRVP)/pkg/_varcet.cpython-35m.so
+file path=$(PYDIRVP)/pkg/_arch.cpython-39m.so
+file path=$(PYDIRVP)/pkg/_pspawn.cpython-39m.so
+file path=$(PYDIRVP)/pkg/_sha512_t.cpython-39m.so
+file path=$(PYDIRVP)/pkg/_sysattr.cpython-39m.so
+file path=$(PYDIRVP)/pkg/_syscallat.cpython-39m.so
+file path=$(PYDIRVP)/pkg/_varcet.cpython-39m.so
 dir  path=$(PYDIRVP)/pkg/actions
 # pkgdepend doesn't understand the relative import syntax "from .x import y",
 # so we have to bypass generating dependencies on those files.
 file path=$(PYDIRVP)/pkg/actions/__init__.py pkg.depend.bypass-generate=.*
-file path=$(PYDIRVP)/pkg/actions/_actions.cpython-35m.so
-file path=$(PYDIRVP)/pkg/actions/_common.cpython-35m.so
+file path=$(PYDIRVP)/pkg/actions/_actions.cpython-39m.so
+file path=$(PYDIRVP)/pkg/actions/_common.cpython-39m.so
 file path=$(PYDIRVP)/pkg/actions/attribute.py pkg.depend.bypass-generate=.*
 file path=$(PYDIRVP)/pkg/actions/depend.py pkg.depend.bypass-generate=.*
 file path=$(PYDIRVP)/pkg/actions/directory.py pkg.depend.bypass-generate=.*
@@ -145,7 +145,7 @@ file path=$(PYDIRVP)/pkg/cpiofile.py pkg.depend.bypass-generate=.*six.*
 file path=$(PYDIRVP)/pkg/dependency.py
 file path=$(PYDIRVP)/pkg/depotcontroller.py pkg.depend.bypass-generate=.*six.*
 file path=$(PYDIRVP)/pkg/digest.py
-file path=$(PYDIRVP)/pkg/elf.cpython-35m.so
+file path=$(PYDIRVP)/pkg/elf.cpython-39m.so
 file path=$(PYDIRVP)/pkg/facet.py pkg.depend.bypass-generate=.*six.*
 dir  path=$(PYDIRVP)/pkg/file_layout
 file path=$(PYDIRVP)/pkg/file_layout/__init__.py
@@ -225,7 +225,7 @@ file path=$(PYDIRVP)/pkg/server/transaction.py \
     pkg.depend.bypass-generate=.*six.*
 file path=$(PYDIRVP)/pkg/sha512_t.py
 file path=$(PYDIRVP)/pkg/smf.py pkg.depend.bypass-generate=.*six.*
-file path=$(PYDIRVP)/pkg/solver.cpython-35m.so
+file path=$(PYDIRVP)/pkg/solver.cpython-39m.so
 file path=$(PYDIRVP)/pkg/sysattr.py pkg.depend.bypass-generate=.*six.*
 file path=$(PYDIRVP)/pkg/syscallat.py pkg.depend.bypass-generate=.*six.*
 file path=$(PYDIRVP)/pkg/sysvpkg.py
@@ -486,18 +486,18 @@ depend type=group fmri=package/pkg/zones-proxy \
 #depend type=parent fmri=feature/package/dependency/self #    variant.opensolaris.zone=nonglobal
 depend type=require fmri=crypto/ca-certificates
 # CFFI import is done in C code, so it isn't picked up by pkgdepend
-depend type=require fmri=library/python/cffi-35
-depend type=require fmri=library/python/cherrypy-35
-depend type=require fmri=library/python/cryptography-35
-depend type=require fmri=library/python/jsonrpclib-35
-depend type=require fmri=library/python/jsonschema-35
-depend type=require fmri=library/python/mako-35
-depend type=require fmri=library/python/ply-35
-depend type=require fmri=library/python/portend-35
-depend type=require fmri=library/python/prettytable-35
-depend type=require fmri=library/python/pybonjour-35
-depend type=require fmri=library/python/pycurl-35
-depend type=require fmri=library/python/pyopenssl-35
-depend type=require fmri=library/python/rapidjson-35
-depend type=require fmri=library/python/six-35
+depend type=require fmri=library/python/cffi-39
+depend type=require fmri=library/python/cherrypy-39
+depend type=require fmri=library/python/cryptography-39
+depend type=require fmri=library/python/jsonrpclib-39
+depend type=require fmri=library/python/jsonschema-39
+depend type=require fmri=library/python/mako-39
+depend type=require fmri=library/python/ply-39
+depend type=require fmri=library/python/portend-39
+depend type=require fmri=library/python/prettytable-39
+depend type=require fmri=library/python/pybonjour-39
+depend type=require fmri=library/python/pycurl-39
+depend type=require fmri=library/python/pyopenssl-39
+depend type=require fmri=library/python/rapidjson-39
+depend type=require fmri=library/python/six-39
 depend type=require fmri=locale/en

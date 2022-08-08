@@ -22,7 +22,7 @@
 # Copyright 2018 OmniOS Community Edition (OmniOSce) Association.
 #
 
-set name=pkg.fmri value=pkg:/package/pkg-35@$(PKGVERS)
+set name=pkg.fmri value=pkg:/package/pkg-39@$(PKGVERS)
 set name=pkg.summary \
     value="Python 3.5 support modules for the Image Packaging System"
 set name=pkg.description \
