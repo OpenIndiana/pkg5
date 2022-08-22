@@ -68,6 +68,10 @@ file path=var/log/pkg/sysrepo/access_log owner=pkg5srv mode=0644 preserve=true
 file path=var/log/pkg/sysrepo/error_log owner=pkg5srv mode=0644 preserve=true
 file path=var/log/pkg/sysrepo/rewrite.log owner=pkg5srv mode=0644 preserve=true
 license cr_Oracle license=cr_Oracle
+depend type=conditional fmri=web/server/apache-24/module/apache-wsgi-35 \
+    predicate=runtime/python-35
+depend type=conditional fmri=web/server/apache-24/module/apache-wsgi-39 \
+    predicate=runtime/python-39
 # force a dependency on the six package because we bypass dependency check for it
 depend type=require fmri=library/python/six-35
 depend type=require fmri=library/python/six-39
@@ -77,6 +81,5 @@ depend type=require fmri=library/python/six-39
 #
 depend type=require fmri=web/server/apache-24
 # p5p support in the system repository requires mod_wsgi
-depend type=require-any fmri=web/server/apache-24/module/apache-wsgi-35 fmri=web/server/apache-24/module/apache-wsgi-39
-depend type=conditional predicate=runtime/python-35 fmri=web/server/apache-24/module/apache-wsgi-35
-depend type=conditional predicate=runtime/python-39 fmri=web/server/apache-24/module/apache-wsgi-39
+depend type=require-any fmri=web/server/apache-24/module/apache-wsgi-35 \
+    fmri=web/server/apache-24/module/apache-wsgi-39
