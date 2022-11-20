@@ -220,7 +220,7 @@ elf_is_elf_object(PyObject *self, PyObject *args)
  *  {
  *  	type: exe|so|core|rel,
  *  	bits: 32|64,
- *  	arch: sparc|x86|ppc|other|none,
+ *  	arch: sparc|x86|ppc|aarch64|other|none,
  *  	end: lsb|msb,
  *  	osabi: none|linux|solaris|other
  *  }

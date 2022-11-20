@@ -1535,16 +1535,39 @@ A facet set on the image can be a full facet such as \fBdoc.man\fR or a pattern 
 [output about packages being updated]
 # \fBpkg change-facet locale.en_US=true\fR
 [output about packages being updated]
-.fi
-.in -2
-.sp
-
-.sp
-.LP
-Most variants can have any number of values. For example, the \fBarch\fR variant can be set to \fBi386\fR, \fBsparc\fR, \fBppc\fR, \fBarm\fR, or whatever architectures the distribution supports. (Only \fBi386\fR and \fBsparc\fR are used in Oracle Solaris.) The exception are the \fBdebug\fR variants. The \fBdebug\fR variants should only be set to \fBtrue\fR or \fBfalse\fR; other values have undefined behavior. If a file action has both non-debug and debug versions, both versions must have the applicable \fBdebug\fR variant explicitly set, as shown in the following example:
-.sp
-.in +2
-.nf
+.Ed
+.Pp
+Most variants can have any number of values.
+For example, the
+.Sy arch
+variant can be set to
+.Sy i386 ,
+.Sy sparc ,
+.Sy ppc ,
+.Sy arm ,
+.Sy aarch64 ,
+or whatever architectures the distribution supports
+.Po only
+.Sy i386
+and
+.Sy aarch64
+are used in OmniOS
+.Pc .
+The exceptions are the
+.Sy debug
+variants.
+The
+.Sy debug
+variants can only be set to
+.Sy true
+or
+.Sy false ;
+other values have undefined behaviour.
+If a file action has both non-debug and debug versions, both versions must have
+the applicable
+.Sy debug
+variant explicitly set, as shown in the following example:
+.Bd -literal -offset indent
 file group=sys mode=0644 overlay=allow owner=root \e
   path=etc/motd pkg.csize=115 pkg.size=103 preserve=true \e
   variant.debug.osnet=true

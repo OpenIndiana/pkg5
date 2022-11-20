@@ -98,6 +98,8 @@ pkg_string_from_arch(int arch)
 	case EM_PPC:
 	case EM_PPC64:
 		return ("ppc");
+	case EM_AARCH64:
+		return ("aarch64");
 	default:
 		return ("other");
 	}
