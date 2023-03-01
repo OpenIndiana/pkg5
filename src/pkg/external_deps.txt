@@ -11,7 +11,7 @@
     pkg:/library/python/cherrypy-39
     pkg:/library/python/coverage-39
     pkg:/library/python/cryptography-39
-    pkg:/library/python/jsonrpclib-39
+    pkg:/library/python/jsonrpclib-pelix-39
     pkg:/library/python/jsonschema-39
     pkg:/library/python/mako-39
     pkg:/library/python/pycodestyle-39
@@ -23,7 +23,7 @@
     pkg:/library/python/pycurl-39
     pkg:/library/python/pyopenssl-39
     pkg:/library/python/pyyaml-39
-    pkg:/library/python/rapidjson-39
+    pkg:/library/python/python-rapidjson-39
     pkg:/library/python/six-39
     pkg:/locale/en
     pkg:/network/netcat
