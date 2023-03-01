@@ -39,7 +39,11 @@ set name=variant.arch value=$(ARCH)
 dir  path=$(PYDIR)
 dir  path=$(PYDIRVP)
 dir  path=$(PYDIRVP)/pkg
-file path=$(PYDIRVP)/pkg-0.1-py3.9.egg-info
+dir  path=$(PYDIRVP)/pkg-0.1-py3.9.egg-info
+file path=$(PYDIRVP)/pkg-0.1-py3.9.egg-info/PKG-INFO
+file path=$(PYDIRVP)/pkg-0.1-py3.9.egg-info/SOURCES.txt
+file path=$(PYDIRVP)/pkg-0.1-py3.9.egg-info/dependency_links.txt
+file path=$(PYDIRVP)/pkg-0.1-py3.9.egg-info/top_level.txt
 file path=$(PYDIRVP)/pkg/__init__.py
 file path=$(PYDIRVP)/pkg/_arch.cpython-39.so
 file path=$(PYDIRVP)/pkg/_pspawn.cpython-39.so
