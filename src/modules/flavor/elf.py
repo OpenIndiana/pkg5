@@ -221,12 +221,14 @@ def process_elf_dependencies(action, pkg_vars, dyn_tok_conv, run_paths,
                                 kernel64 = "amd64"
                         elif ei["arch"] == "sparc":
                                 kernel64 = "sparcv9"
+                        elif ei["arch"] == "aarch64":
+                                kernel64 = "aarch64"
                         else:
                                 raise RuntimeError("Unknown arch:{0}".format(
                                     ei["arch"]))
         else:
                 for p in default_run_paths:
-                        if ei["bits"] == 64:
+                        if ei["bits"] == 64 and ei["arch"] != "aarch64":
                                 p += "/64"
                         if p not in rp:
                                 rp.append(p)
