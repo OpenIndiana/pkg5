@@ -27,13 +27,12 @@ set name=pkg.description \
     value="This package should be installed on systems used for development of the pkg(5) project"
 set name=info.classification \
     value="org.opensolaris.category.2008:Development/Distribution Tools"
-depend type=conditional fmri=web/server/apache-24/module/apache-wsgi-39 \
-    predicate=runtime/python-39
 depend type=require fmri=pkg:/developer/build/make
 depend type=require fmri=pkg:/developer/build/onbld
-depend type=require fmri=pkg:/developer/gnome/gettext
+depend type=require fmri=pkg:/developer/build/pkg-config
 depend type=require fmri=pkg:/developer/python/pylint
 depend type=require fmri=pkg:/developer/versioning/mercurial
+depend type=require fmri=pkg:/gnome/gnome-common
 depend type=require fmri=pkg:/library/python/cffi-39
 depend type=require fmri=pkg:/library/python/cherrypy-39
 depend type=require fmri=pkg:/library/python/coverage-39
@@ -57,9 +56,10 @@ depend type=require fmri=pkg:/system/header
 depend type=require fmri=pkg:/system/zones
 depend type=require fmri=pkg:/text/gnu-diffutils
 depend type=require fmri=pkg:/text/gnu-gettext
+depend type=require fmri=pkg:/text/intltool
 depend type=require fmri=pkg:/text/locale
 depend type=require fmri=pkg:/text/tidy
 depend type=require fmri=pkg:/web/server/apache-24
 depend type=require fmri=pkg:/web/wget
 # p5p support in the system repository requires mod_wsgi
-depend type=require fmri=web/server/apache-24/module/apache-wsgi-39
+depend type=require fmri=pkg:/web/server/apache-24/module/apache-wsgi-39
