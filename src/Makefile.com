@@ -11,7 +11,7 @@
 
 # Copyright 2022, Richard Lowe.
 
-CC = /usr/gcc/10/bin/gcc
+CC = /usr/gcc/13/bin/gcc
 CFLAGS = -m64 -Wall
 CPPFLAGS = -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS
 
