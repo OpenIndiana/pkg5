@@ -44,6 +44,7 @@ import time
 from contextlib import contextmanager
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
+from cryptography.utils import CryptographyDeprecationWarning
 from six.moves.urllib.parse import quote, unquote
 
 import pkg.actions
@@ -354,6 +355,22 @@ in the environment or by setting simulate_cmdpath in DebugValues.""")
                                 except (ValueError, IOError) as e:
                                         self.__bad_trust_anchors.append(
                                             (pth, str(e)))
+                                except CryptographyDeprecationWarning as e:
+                                        # We tend to get a warning when upgrading
+                                        # from older images (2023 and before) that
+                                        # negative certificate numbers are deprecated.
+                                        # As of Aug 2024 the pyca library behind it
+                                        # still supports them in practice. However,
+                                        # the warning itself counted as an uncaught
+                                        # exception here.
+                                        sys.stderr.write(str(e))
+                                        # We store certificates internally by
+                                        # the SHA-1 hash of its subject.
+                                        s = hashlib.sha1(misc.force_bytes(
+                                            trusted_ca.subject)).hexdigest()
+                                        self.__trust_anchors.setdefault(s, [])
+                                        self.__trust_anchors[s].append(
+                                            trusted_ca)
                                 else:
                                         # We store certificates internally by
                                         # the SHA-1 hash of its subject.
