@@ -124,6 +124,7 @@ System
      - Text Tools
      - Trusted
      - Virtualization
+     - Wayland
      - X11
 
 Web Services
