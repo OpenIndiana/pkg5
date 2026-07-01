@@ -60,11 +60,15 @@ PUBLISHALL        = $(POUND_SIGN)
 MANIFESTS.cmd     = \
 	cd manifests; \
 	buildnum=$(BUILDID); \
-	m=$$($(PKGMOGRIFY) -O /dev/null *.p5m ../transforms/nopublish); \
+	if ! m=$$($(PKGMOGRIFY) -O /dev/null *.p5m ../transforms/nopublish); then \
+		echo "ERROR: pkgmogrify failed while computing MANIFESTS." >&2; \
+		echo "       Expected tool at $(PKGROOT)/usr/bin/pkgmogrify" >&2; \
+		echo "       Is the proto area built? Run 'make install' in src/ first." >&2; \
+		exit 1; \
+	fi; \
 	echo "$$m" | while read name build; do \
 		[[ $$build -ge $${buildnum%%.*} ]] && echo $$name; \
-	done | sed -e 's/:/\\:/g'; \
-	exit 0
+	done | sed -e 's/:/\\:/g'
 MANIFESTS         = $(MANIFESTS.cmd:sh)
 ALL_MANIFESTS:sh  = \
 	cd manifests; \

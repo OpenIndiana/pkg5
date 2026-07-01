@@ -41,11 +41,11 @@ JOBS = 8
 
 SUBDIRS=brand zoneproxy util/mkcert
 
-all: $(SUBDIRS) build
+all: $(SUBDIRS) .WAIT build
 
 build: $(PYTHON_VERSIONS)
 
-install: $(SUBDIRS) $(PYTHON_VERSIONS)
+install: $(SUBDIRS) .WAIT $(PYTHON_VERSIONS)
 
 clean: $(SUBDIRS) $(PYTHON_VERSIONS)
 	@cd pkg; pwd; make clean

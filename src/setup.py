@@ -1123,6 +1123,7 @@ class build_py_func(_build_py):
                 # Before building extensions, we need to generate .c files
                 # for the C extension modules by running the CFFI build
                 # script files.
+                cffi_procs = []
                 for path in os.listdir(cffi_dir):
                         if not path.startswith("build_"):
                                 continue
@@ -1135,6 +1136,17 @@ class build_py_func(_build_py):
                         # run the scripts
                         p = subprocess.Popen(
                             [sys.executable, path])
+                        cffi_procs.append((path, p))
+
+                # Wait for the CFFI code generation to finish before returning.
+                # build_ext compiles these generated .c files, so letting the
+                # scripts run in the background races under parallel builds and
+                # can leave C extensions unbuilt.
+                for path, p in cffi_procs:
+                        if p.wait() != 0:
+                                print("ERROR: CFFI build script failed: "
+                                    "{0}".format(path), file=sys.stderr)
+                                sys.exit(1)
 
                 return ret
 
