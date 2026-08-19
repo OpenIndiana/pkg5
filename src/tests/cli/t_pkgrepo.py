@@ -1591,6 +1591,46 @@ publisher\tprefix\texample.net
                 shutil.rmtree(src_repo)
                 shutil.rmtree(dest_repo)
 
+        def test_09a_remove_duplicate_fmri(self):
+                """Verify that remove works when the same FMRI is reachable
+                from more than one repository store."""
+
+                repo_path = os.path.join(self.test_root, "dup-fmri-repo")
+                self.create_repo(repo_path)
+                self.pkgrepo("set -s {0} publisher/prefix=test".format(
+                    repo_path))
+                published = self.pkgsend_bulk(repo_path, self.zoo10)
+
+                # Note where the manifest lives while 'test' is still the only
+                # store, so that the check made below is unambiguous.
+                mpath = self.get_repo(repo_path).manifest(published[0])
+
+                # Duplicate the publisher's storage under a second publisher
+                # directory.  The copied catalog still describes its packages
+                # as belonging to 'test', so the very same FMRI is now
+                # returned by two different repository stores.  This mirrors
+                # what a repository looks like after a rebuild has indexed
+                # manifests that ended up below the wrong publisher.
+                pub_root = os.path.join(repo_path, "publisher")
+                shutil.copytree(os.path.join(pub_root, "test"),
+                    os.path.join(pub_root, "test2"))
+
+                # Merging the per-store pattern references used to fail here
+                # with 'AttributeError: str object has no attribute extend'.
+                repo = self.get_repo(repo_path)
+                matching, refs = repo.get_matching_fmris(["zoo"])
+                self.assertEqual(["zoo"], list(matching.keys()))
+                for pats in refs.values():
+                        self.assertEqual(["zoo"], sorted(set(pats)))
+
+                # ...which meant remove could not be used on such a
+                # repository at all.
+                self.pkgrepo("remove -s {0} zoo".format(repo_path))
+                self.assertTrue(not os.path.exists(mpath))
+
+                # Cleanup.
+                shutil.rmtree(repo_path)
+
         def test_10_list(self):
                 """Verify the list subcommand works as expected."""
 

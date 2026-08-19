@@ -3354,14 +3354,16 @@ class Catalog(object):
                         for k, l in six.iteritems(d):
                                 proposed_dict.setdefault(k, []).extend(l)
 
-                # construct references so that we can know which pattern
-                # generated which fmris...
-                references = dict([
-                    (f, p)
-                    for p in ret.keys()
-                    for flist in ret[p].values()
-                    for f in flist
-                ])
+                # construct references so that we can know which patterns
+                # generated which fmris...  An FMRI can be matched by more
+                # than one pattern, so each entry is a list; callers (and
+                # this function's contract) rely on that.
+                references = {}
+                for p in ret.keys():
+                        for flist in ret[p].values():
+                                for f in flist:
+                                        references.setdefault(f,
+                                            []).append(p)
 
                 return proposed_dict, references, unmatched
 

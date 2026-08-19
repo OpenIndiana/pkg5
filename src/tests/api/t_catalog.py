@@ -776,6 +776,18 @@ class TestCatalog(pkg5unittest.Pkg5TestCase):
                     ["xyzzy", "base"])
                 self.assertEqual(set(["xyzzy"]), unmatched)
 
+                # Verify that references maps each matching FMRI to the list
+                # of every pattern that matched it.  Callers such as
+                # pkg.server.repository.Repository.get_matching_fmris merge
+                # these values together, so they have to be lists and not
+                # bare strings.
+                pdict, references, unmatched = cat.get_matching_fmris(
+                    ["ba*", "base"])
+                self.assertEqual(set(), unmatched)
+                self.assertEqual([p1_fmri], list(references.keys()))
+                self.assertEqual(["ba*", "base"],
+                    sorted(references[p1_fmri]))
+
                 # Next, verify that removal of an FMRI not in the catalog will
                 # raise the expected exception.  Do this by removing an FMRI
                 # and then attempting to remove it again.
