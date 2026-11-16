@@ -49,26 +49,37 @@ from pkg.misc import AsyncCall, AsyncCallException
 class TestAsyncRPC(pkg5unittest.Pkg5TestCase):
 
         def test_http_response_bytes(self):
-                """HTTP response bodies must be bytes, including partial reads."""
+                """HTTP responses read over a pipe are bytes, including
+                partial reads and bodies spread over several descriptors."""
 
-                for partial in (False, True):
-                        self.__http_response_bytes(b"linked image result",
-                            partial)
-                        self.__http_response_bytes(
-                            u"linked image: \u00f6\u20ac\U0001f642".encode("utf-8"),
-                            partial)
+                bodies = (b"linked image result",
+                    u"linked image: \u00f6\u20ac\U0001f642".encode("utf-8"))
+                for body in bodies:
+                        for partial in (False, True):
+                                self.__http_response_bytes(body, partial)
+
+        @staticmethod
+        def __sendfd_bytes(pipe, data):
+                """Send 'data' over 'pipe' in a new temporary file."""
+
+                with tempfile.TemporaryFile() as tmp:
+                        tmp.write(data)
+                        tmp.flush()
+                        pipe.sendfd(tmp.fileno())
 
         def __http_response_bytes(self, body, partial):
-                response = (b"HTTP/1.0 200 OK\r\nContent-Length: " +
-                    str(len(body)).encode("ascii") + b"\r\n\r\n" + body)
+                headers = (b"HTTP/1.0 200 OK\r\nContent-Length: " +
+                    str(len(body)).encode("ascii") + b"\r\n\r\n")
                 client_fd, server_fd = os.pipe()
                 client = pkg.pipeutils.PipeSocket(client_fd, "test-client")
                 server = pkg.pipeutils.PipeFile(server_fd, "test-server")
                 try:
-                        with tempfile.TemporaryFile() as output:
-                                output.write(response)
-                                output.flush()
-                                server.sendfd(output.fileno())
+                        # Like http.server, send the headers and the body
+                        # separately, and split off the last body byte (for
+                        # the UTF-8 body, inside a multibyte character).
+                        split = len(body) - 1
+                        for data in (headers, body[:split], body[split:]):
+                                self.__sendfd_bytes(server, data)
                         server.close()
                         result = pkg.pipeutils.PipedHTTPResponse(client)
                         try:
@@ -87,7 +98,8 @@ class TestAsyncRPC(pkg5unittest.Pkg5TestCase):
                         server.close()
 
         def test_pipe_read_modes(self):
-                """HTTP reads count bytes; unencapsulated RPC keeps text."""
+                """HTTP encapsulated reads return bytes; unencapsulated reads
+                return str."""
 
                 for http_enc in (True, False):
                         client_fd, server_fd = os.pipe()
@@ -95,14 +107,26 @@ class TestAsyncRPC(pkg5unittest.Pkg5TestCase):
                             http_enc=http_enc)
                         server = pkg.pipeutils.PipeFile(server_fd, "server",
                             http_enc=http_enc)
-                        body = u"\u00f6\u20ac\U0001f642\n"
-                        expected = body.encode("utf-8") if http_enc else body
-                        empty = b"" if http_enc else ""
+                        # Text mode decodes with the locale's encoding, so
+                        # only the HTTP case uses a non-ASCII payload.
+                        if http_enc:
+                                data = u"\u00f6\u20ac\n".encode("utf-8") + \
+                                    b"body\n"
+                                expected = data
+                        else:
+                                data = b"line\nbody\n"
+                                expected = data.decode("ascii")
+                        first = len(expected.splitlines(True)[0])
+                        empty = expected[:0]
                         try:
-                                server.write(body)
+                                self.__sendfd_bytes(server, data)
                                 server.close()
-                                self.assertEqual(client.read(1), expected[:1])
-                                self.assertEqual(client.read(), expected[1:])
+                                self.assertEqual(client.readline(),
+                                    expected[:first])
+                                self.assertEqual(client.read(1),
+                                    expected[first:first + 1])
+                                self.assertEqual(client.read(),
+                                    expected[first + 1:])
                                 self.assertEqual(client.read(), empty)
                                 self.assertEqual(client.readline(), empty)
                         finally:
