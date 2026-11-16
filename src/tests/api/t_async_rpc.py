@@ -35,6 +35,7 @@ import random
 import signal
 import six
 import sys
+import tempfile
 import threading
 import time
 import traceback
@@ -46,6 +47,67 @@ from pkg.client.debugvalues import DebugValues
 from pkg.misc import AsyncCall, AsyncCallException
 
 class TestAsyncRPC(pkg5unittest.Pkg5TestCase):
+
+        def test_http_response_bytes(self):
+                """HTTP response bodies must be bytes, including partial reads."""
+
+                for partial in (False, True):
+                        self.__http_response_bytes(b"linked image result",
+                            partial)
+                        self.__http_response_bytes(
+                            u"linked image: \u00f6\u20ac\U0001f642".encode("utf-8"),
+                            partial)
+
+        def __http_response_bytes(self, body, partial):
+                response = (b"HTTP/1.0 200 OK\r\nContent-Length: " +
+                    str(len(body)).encode("ascii") + b"\r\n\r\n" + body)
+                client_fd, server_fd = os.pipe()
+                client = pkg.pipeutils.PipeSocket(client_fd, "test-client")
+                server = pkg.pipeutils.PipeFile(server_fd, "test-server")
+                try:
+                        with tempfile.TemporaryFile() as output:
+                                output.write(response)
+                                output.flush()
+                                server.sendfd(output.fileno())
+                        server.close()
+                        result = pkg.pipeutils.PipedHTTPResponse(client)
+                        try:
+                                result.begin()
+                                if partial:
+                                        actual = b"".join(result.read(1)
+                                            for _ in range(len(body)))
+                                else:
+                                        actual = result.read()
+                                self.assertEqual(actual, body)
+                                self.assertEqual(result.read(), b"")
+                        finally:
+                                result.close()
+                finally:
+                        client.close()
+                        server.close()
+
+        def test_pipe_read_modes(self):
+                """HTTP reads count bytes; unencapsulated RPC keeps text."""
+
+                for http_enc in (True, False):
+                        client_fd, server_fd = os.pipe()
+                        client = pkg.pipeutils.PipeFile(client_fd, "client",
+                            http_enc=http_enc)
+                        server = pkg.pipeutils.PipeFile(server_fd, "server",
+                            http_enc=http_enc)
+                        body = u"\u00f6\u20ac\U0001f642\n"
+                        expected = body.encode("utf-8") if http_enc else body
+                        empty = b"" if http_enc else ""
+                        try:
+                                server.write(body)
+                                server.close()
+                                self.assertEqual(client.read(1), expected[:1])
+                                self.assertEqual(client.read(), expected[1:])
+                                self.assertEqual(client.read(), empty)
+                                self.assertEqual(client.readline(), empty)
+                        finally:
+                                client.close()
+                                server.close()
 
         @staticmethod
         def __nop():
