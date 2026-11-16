@@ -271,8 +271,10 @@ class TestAsyncRPC(pkg5unittest.Pkg5TestCase):
                     http_enc=http_enc, use_proc=use_proc)
 
                 # test rpc call of a server function that raises an exception
+                # (jsonrpclib-pelix 1.2 and later only return a reference
+                # to the server-side error)
                 self.assertRaisesRegexp(AsyncCallException,
-                    "Server error: .* Exception: raise_ex()",
+                    r"Server error(: .* Exception: raise_ex\(\)| \(ref: \w+\))",
                     self.__server_setup_and_call,
                     "raise_ex",
                     http_enc=http_enc, use_proc=use_proc)
