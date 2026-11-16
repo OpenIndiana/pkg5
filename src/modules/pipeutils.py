@@ -198,7 +198,7 @@ class PipeFile(object):
                 if self.__readfh is not None:
                         # read from the fd that we received over the pipe
                         data = self.__readfh.readline(*args)
-                        if data != "":
+                        if data:
                                 if self.__http_enc:
                                 # Python 3`http.client`HTTPReponse`_read_status:
                                 # requires a bytes input.
@@ -212,7 +212,8 @@ class PipeFile(object):
                 fd = self.recvfd()
                 if fd == -1:
                         return b"" if self.__http_enc else ""
-                self.__readfh = os.fdopen(fd)
+                self.__readfh = os.fdopen(fd,
+                    "rb" if self.__http_enc else "r")
                 # return data from the received fd
                 return self.readline(*args)
 
@@ -223,7 +224,7 @@ class PipeFile(object):
                 if self.__readfh is not None:
                         # read from the fd that we received over the pipe
                         data = self.__readfh.read(size)
-                        if data != "":
+                        if data:
                                 return data
                         # the fd we received over the pipe is empty
                         self.__readfh = None
@@ -231,8 +232,12 @@ class PipeFile(object):
                 # recieve a file descriptor from the pipe
                 fd = self.recvfd()
                 if fd == -1:
-                        return ""
-                self.__readfh = os.fdopen(fd)
+                        return b"" if self.__http_enc else ""
+                # With HTTP encapsulation our reader is http.client or
+                # http.server: they count Content-Length in bytes and join
+                # the chunks we return with b"".join(), so return bytes.
+                self.__readfh = os.fdopen(fd,
+                    "rb" if self.__http_enc else "r")
                 # return data from the received fd
                 return self.read(size)
 
